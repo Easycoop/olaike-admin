@@ -97,6 +97,17 @@ function Admin() {
           )}
           <div
             onClick={() => {
+              setPath("Send money");
+              setColorId(108);
+              navigate("/main/send-money");
+            }}
+            className={colorId === 108 ? "dashboard__navbar__active" : ""}
+          >
+            <FaUserPlus className="dashboard__navbar__icon" />
+            <h3>Send money</h3>
+          </div>
+          <div
+            onClick={() => {
               setPath("Create user");
               setColorId(9);
               navigate("/main/create-user");
@@ -133,6 +144,17 @@ function Admin() {
               <h3>Create new society</h3>
             </div>
           )}
+          <div
+            onClick={() => {
+              setPath("Withdrawal requests");
+              setColorId(39);
+              navigate("/main/withdrawal-requests");
+            }}
+            className={colorId === 39 ? "dashboard__navbar__active" : ""}
+          >
+            <FaUserPlus className="dashboard__navbar__icon" />
+            <h3>withdrawal requests</h3>
+          </div>
           <div
             onClick={() => {
               setPath("Registration applications");

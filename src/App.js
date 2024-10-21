@@ -22,6 +22,8 @@ import AdminCreateSociety from "./pages/admin.create.society/Admin.create.societ
 import ToasterContainer from "./components/ui/toast/ToasterContainer";
 import AdminSocieties from "./pages/admin.societies/Admin.societies";
 import AdminCreateRole from "./pages/admin.create.role/Admin.create.role";
+import AdminWithdrawalRequest from "./pages/admin.withdrawal.request/Admin.withdrawal.request";
+import AdminSendMoney from "./pages/admin.send.money/Send.money";
 
 function App() {
   const { theme } = useContext(StateContext);
@@ -37,6 +39,10 @@ function App() {
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="users" element={<DashboardUser />} />
               <Route path="transaction" element={<AdminTransaction />} />
+              <Route
+                path="withdrawal-requests"
+                element={<AdminWithdrawalRequest />}
+              />
               <Route path="societies" element={<AdminSocieties />} />
               <Route path="user/:userId" element={<AdminSingleUser />} />
               <Route path="edit-user/:userId" element={<AdminEditUser />} />
@@ -44,6 +50,7 @@ function App() {
               <Route path="create-user" element={<AdminCreateUser />} />
               <Route path="create-role" element={<AdminCreateRole />} />
               <Route path="create-society" element={<AdminCreateSociety />} />
+              <Route path="send-money" element={<AdminSendMoney />} />
               <Route
                 path="loan-applications"
                 element={<AdminLoanApplication />}
