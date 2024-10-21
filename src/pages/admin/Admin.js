@@ -1,6 +1,6 @@
 import "./Admin.css";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { MdOutlinePayment } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
 import { BiMenu } from "react-icons/bi";
@@ -95,6 +95,17 @@ function Admin() {
               <h3>Societies</h3>
             </div>
           )}
+          <div
+            onClick={() => {
+              setPath("Deposit");
+              setColorId(143);
+              navigate("/main/deposit-money");
+            }}
+            className={colorId === 143 ? "dashboard__navbar__active" : ""}
+          >
+            <FaUserPlus className="dashboard__navbar__icon" />
+            <h3>Deposit money</h3>
+          </div>
           <div
             onClick={() => {
               setPath("Send money");

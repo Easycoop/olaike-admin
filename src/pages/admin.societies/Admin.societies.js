@@ -6,6 +6,7 @@ import Loading from "../../components/splash/loading/Loading";
 import NoResult from "../../components/splash/no-result/NoResult";
 import { useNavigate } from "react-router-dom";
 import { useGetSocieties } from "../../redux/actions/societyAction";
+import { BiPen } from "react-icons/bi";
 
 function AdminSocieties() {
   const lastTransaction = useRef();
@@ -78,10 +79,10 @@ function AdminSocieties() {
               </h1>
 
               <h1 className="admin__transaction__section__two__header__userid">
-                Wallet ID
+                Status
               </h1>
               <h1 className="admin__transaction__section__two__header__status">
-                Status
+                Action
               </h1>
             </div>
             {result.map((item, i) => {
@@ -104,9 +105,6 @@ function AdminSocieties() {
                   </h1>
 
                   <h1 className="admin__transaction__section__two__entry__userid">
-                    {result[i].walletId}
-                  </h1>
-                  <h1 className="admin__transaction__section__two__entry__status">
                     <span>
                       <PiCircleFill
                         className={
@@ -119,6 +117,12 @@ function AdminSocieties() {
                       />
                       {result[i].isActive}
                     </span>
+                  </h1>
+                  <h1
+                    className="admin__transaction__section__two__entry__status"
+                    onClick={() => navigate(`/main/edit-society/${item.id}`)}
+                  >
+                    <BiPen />
                   </h1>
                 </div>
               );

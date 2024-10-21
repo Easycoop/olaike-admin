@@ -13,6 +13,7 @@ function AdminCreateSociety() {
   const [errorMessage, setErrorMessage] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [entranceFee, setEntranceFee] = useState("");
 
   const handleCreateSociety = async () => {
     if (!name || !description) {
@@ -26,6 +27,7 @@ function AdminCreateSociety() {
       const response = await createSociety({
         name,
         description,
+        entranceFee,
       });
       if (
         response?.payload.status === true ||
@@ -34,6 +36,7 @@ function AdminCreateSociety() {
         setErrorMessage("");
         setName("");
         setDescription("");
+        setEntranceFee("");
         toastManager.addToast({
           message: "Society created successfully",
           type: "success",
@@ -86,6 +89,19 @@ function AdminCreateSociety() {
                 value={description}
                 alt=""
                 onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+            <div className="edit__user__article__div">
+              <label>
+                Entrance Fee
+                <BsAsterisk className="edit__user__article__div__icon"></BsAsterisk>
+              </label>
+              <input
+                required
+                type="number"
+                value={entranceFee}
+                alt=""
+                onChange={(e) => setEntranceFee(e.target.value)}
               />
             </div>
           </article>

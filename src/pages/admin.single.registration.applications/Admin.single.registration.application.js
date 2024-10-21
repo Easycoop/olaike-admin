@@ -26,6 +26,7 @@ function SingleLoanApplications() {
       lastName: result.lastName,
       email: result.email,
       password: result.password,
+      gender: result.gender,
       group: result.group,
     };
     try {
@@ -95,6 +96,10 @@ function SingleLoanApplications() {
             <span>
               <h1>Email</h1>
               <h3>{result?.email}</h3>
+            </span>
+            <span>
+              <h1>Gender</h1>
+              <h3>{result?.gender}</h3>
             </span>
             <span>
               <h1>Role</h1>

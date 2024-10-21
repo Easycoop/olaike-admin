@@ -1,0 +1,185 @@
+import "./Admin.create.society.css";
+import { useEffect, useState } from "react";
+import { BsAsterisk } from "react-icons/bs";
+import { NavigationType, useNavigate } from "react-router-dom";
+import {
+  useGetSociety,
+  useUpdateSociety,
+} from "../../redux/actions/societyAction";
+import toastManager from "../../components/ui/toast/ToasterManager";
+import { ClipLoader } from "react-spinners";
+import Loading from "../../components/splash/loading/Loading";
+
+function AdminUpdateSociety() {
+  const getSociety = useGetSociety();
+  const updateSociety = useUpdateSociety();
+  const { societyId } = useParams();
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [loadingInit, setLoadingInit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [entranceFee, setEntranceFee] = useState("");
+  const [isActive, setIsActive] = useState(true);
+
+  const handleUpdateSociety = async () => {
+    if (!name || !description || entranceFee) {
+      setErrorMessage("Name or description cannot be empty");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await updateSociety({
+        name,
+        description,
+        entranceFee,
+        isActive,
+      });
+      if (
+        response?.payload.status === true ||
+        response?.payload.status === "success"
+      ) {
+        setErrorMessage("");
+        setName("");
+        setDescription("");
+        setEntranceFee("");
+        toastManager.addToast({
+          message: "Society created successfully",
+          type: "success",
+        });
+        navigate(-1);
+        return;
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (error) {
+      setErrorMessage(error.response.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGetSociety = async () => {
+    setLoadingInit(true);
+
+    try {
+      const response = await getSociety(societyId);
+      if (
+        response?.payload.status === true ||
+        response?.payload.status === "success"
+      ) {
+        setErrorMessage("");
+        setName(response.payload.data.name);
+        setDescription(response.payload.data.description);
+        setEntranceFee(response.payload.data.entranceFee);
+        return;
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (error) {
+      setErrorMessage(error.response.message);
+    } finally {
+      setLoadingInit(false);
+    }
+  };
+
+  useEffect(() => {
+    handleGetSociety;
+  }, []);
+
+  return (
+    <>
+      {loadingInit ? (
+        <Loading />
+      ) : (
+        <div className="create__society">
+          <h1>Edit society</h1>
+          <section className="edit__user__section1 create__society__wrap">
+            <article
+              style={{
+                justifyContent: "start",
+                gap: "20px",
+              }}
+            >
+              <div className="edit__user__article__div">
+                <label>
+                  Name
+                  {/* <BsAsterisk className="edit__user__article__div__icon"></BsAsterisk> */}
+                </label>
+                <input
+                  required
+                  type="text"
+                  alt=""
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                {errorMessage && (
+                  <p className="error__message">{errorMessage}</p>
+                )}
+              </div>
+
+              <div className="edit__user__article__div">
+                <label>
+                  Description
+                  {/* <BsAsterisk className="edit__user__article__div__icon"></BsAsterisk> */}
+                </label>
+                <input
+                  required
+                  type="text"
+                  value={description}
+                  alt=""
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+              <div className="edit__user__article__div">
+                <label>
+                  Entrance Fee
+                  {/* <BsAsterisk className="edit__user__article__div__icon"></BsAsterisk> */}
+                </label>
+                <input
+                  required
+                  type="number"
+                  value={entranceFee}
+                  alt=""
+                  onChange={(e) => setEntranceFee(e.target.value)}
+                />
+              </div>
+              <div className="edit__user__article__div">
+                <label>
+                  Is active
+                  {/* <BsAsterisk className="edit__user__article__div__icon"></BsAsterisk> */}
+                </label>
+                <select
+                  required
+                  value={isActive}
+                  alt=""
+                  onChange={(e) => setIsActive(e.target.value)}
+                >
+                  <option value={null}>--</option>
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
+              </div>
+            </article>
+          </section>
+
+          <span>
+            <button disabled={loading} onClick={handleCreateSociety}>
+              {loading ? (
+                <ClipLoader color="#fff" size={20} />
+              ) : (
+                "Create society"
+              )}
+            </button>
+          </span>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default AdminUpdateSociety;
