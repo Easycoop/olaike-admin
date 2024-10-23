@@ -7,6 +7,7 @@ import NoResult from "../../components/splash/no-result/NoResult";
 import { useNavigate } from "react-router-dom";
 import { useGetSocieties } from "../../redux/actions/societyAction";
 import { BiPen } from "react-icons/bi";
+import { BsPen } from "react-icons/bs";
 
 function AdminSocieties() {
   const lastTransaction = useRef();
@@ -122,7 +123,8 @@ function AdminSocieties() {
                     className="admin__transaction__section__two__entry__status"
                     onClick={() => navigate(`/main/edit-society/${item.id}`)}
                   >
-                    <BiPen />
+                    Edit
+                    <BsPen />
                   </h1>
                 </div>
               );

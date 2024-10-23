@@ -1,7 +1,7 @@
-import "./Admin.create.society.css";
+import "./Admin.update.society.css";
 import { useEffect, useState } from "react";
 import { BsAsterisk } from "react-icons/bs";
-import { NavigationType, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetSociety,
   useUpdateSociety,
@@ -47,6 +47,7 @@ function AdminUpdateSociety() {
         setName("");
         setDescription("");
         setEntranceFee("");
+        setIsActive(true);
         toastManager.addToast({
           message: "Society created successfully",
           type: "success",
@@ -88,7 +89,7 @@ function AdminUpdateSociety() {
   };
 
   useEffect(() => {
-    handleGetSociety;
+    handleGetSociety();
   }, []);
 
   return (
@@ -168,12 +169,8 @@ function AdminUpdateSociety() {
           </section>
 
           <span>
-            <button disabled={loading} onClick={handleCreateSociety}>
-              {loading ? (
-                <ClipLoader color="#fff" size={20} />
-              ) : (
-                "Create society"
-              )}
+            <button disabled={loading} onClick={handleUpdateSociety}>
+              {loading ? <ClipLoader color="#fff" size={20} /> : "Edit society"}
             </button>
           </span>
         </div>

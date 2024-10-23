@@ -31,7 +31,7 @@ export const updateSociety = async (payload) => {
       name: payload.name,
       description: payload.description,
       entranceFee: payload.entranceFee,
-      isActive: isActive,
+      isActive: payload.isActive,
     });
     return response.data;
   } catch (error) {
