@@ -6,6 +6,7 @@ import {
   useUpdateUserApplication,
 } from "../../redux/actions/applicationAction";
 import toastManager from "../../components/ui/toast/ToasterManager";
+import { ClipLoader } from "react-spinners";
 
 function SingleLoanApplications() {
   const getSingleApplication = useGetSingleApplication();
@@ -28,6 +29,7 @@ function SingleLoanApplications() {
       password: result.password,
       gender: result.gender,
       group: result.group,
+      referral: result.referralCode,
     };
     try {
       const response = await updateUserApplication(payload);
@@ -118,7 +120,7 @@ function SingleLoanApplications() {
                   submit("accept");
                 }}
               >
-                Accept
+                {loading ? <ClipLoader color="#fff" size={20} /> : " Accept"}
               </button>
               <button
                 disabled={loading}
@@ -126,7 +128,7 @@ function SingleLoanApplications() {
                   submit("reject");
                 }}
               >
-                Reject
+                {loading ? <ClipLoader color="#fff" size={20} /> : " Reject"}
               </button>
             </span>
           )}
