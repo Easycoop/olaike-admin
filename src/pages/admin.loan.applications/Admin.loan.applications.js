@@ -3,52 +3,37 @@ import "./Admin.loan.applications.css";
 import { PiCircleFill } from "react-icons/pi";
 import { FaFileCircleCheck } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { useGetLoanApplications } from "../../redux/actions/applicationAction";
+import { useEffect, useState } from "react";
 
 function AdminLoanApplication() {
-  const applicationId = 1;
+  const getLoanApplications = useGetLoanApplications();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [result, setResult] = useState([]);
   const navigate = useNavigate();
-  const result = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john.doe@example.com",
-      phone: "+1 1234567890",
-      amount: "₦250,000",
-      status: "pending",
-      userId: "144f-125f-fdg",
-      date: "12th July, 2024",
-    },
-    {
-      id: 2,
-      name: "Emmanuel Kant",
-      email: "jane.doe@example.com",
-      phone: "+2 9876543210",
-      amount: "₦300,000",
-      status: "successful",
-      userId: "144f-125f-fdg",
-      date: "12th July, 2024",
-    },
-    {
-      id: 3,
-      name: "David Smith",
-      email: "david.smith@example.com",
-      phone: "+3 3333333333",
-      amount: "₦200,000",
-      status: "unsuccessful",
-      userId: "144f-125f-fdg",
-      date: "12th July, 2024",
-    },
-    {
-      id: 4,
-      name: "Amara Williams",
-      email: "amara.williams@example.com",
-      phone: "+4 4444444444",
-      amount: "₦250,000",
-      status: "pending",
-      userId: "144f-125f-fdg",
-      date: "12th July, 2024",
-    },
-  ];
+
+  const handleGetLoanApplications = async () => {
+    setLoading(true);
+    try {
+      const response = await getLoanApplications();
+      if (response?.payload.success === true) {
+        setErrorMessage("");
+        setResult(response.payload.data.result);
+        return;
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (error) {
+      setErrorMessage(error.response.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleGetLoanApplications();
+  }, []);
 
   return (
     <>
@@ -78,7 +63,7 @@ function AdminLoanApplication() {
                 <h1>
                   {
                     result.filter(function (item, i) {
-                      if (result[i].status == "successful") {
+                      if (result[i].status == "active") {
                         return result[i];
                       }
                     }).length
@@ -108,7 +93,7 @@ function AdminLoanApplication() {
                 <h1>
                   {
                     result.filter(function (item, i) {
-                      if (result[i].status == "unsuccessful") {
+                      if (result[i].status == "inactive") {
                         return result[i];
                       }
                     }).length
@@ -124,7 +109,7 @@ function AdminLoanApplication() {
               Application date
             </h1>
             <h1 className="ad__student__app__section__two__header__id">
-              Application number
+              Application ID
             </h1>
             <h1 className="ad__student__app__section__two__header__university">
               Name
@@ -146,37 +131,37 @@ function AdminLoanApplication() {
               <div
                 className="ad__student__app__section__two__entry"
                 onClick={() => {
-                  navigate(`/main/loan-application/${applicationId}`);
+                  navigate(`/main/loan-application/${item.id}`);
                 }}
               >
                 <h1 className="ad__student__app__section__two__entry__date">
-                  {result[i].date}
+                  {item.createdAt}
                 </h1>
                 <h1 className="ad__student__app__section__two__entry__id">
-                  {result[i].id}
+                  {item.id}
                 </h1>
                 <h1 className="ad__student__app__section__two__entry__university">
-                  {result[i].name}
+                  {`${item.firstName} ${item.lastName}`}
                 </h1>
                 <h1 className="ad__student__app__section__two__entry__universityemail">
-                  {result[i].amount}
+                  {item.amount}
                 </h1>
 
                 <h1 className="ad__student__app__section__two__entry__userid">
-                  {result[i].userId}
+                  {item.userId}
                 </h1>
                 <h1 className="ad__student__app__section__two__entry__status">
                   <span>
                     <PiCircleFill
                       className={
-                        result[i].status == "successful"
+                        item.status == "active"
                           ? "ad__student__app__section__two__entry__status__icon successful"
-                          : result[i].status == "unsuccessful"
+                          : item.status == "inactive"
                           ? "ad__student__app__section__two__entry__status__icon unsuccessful"
                           : "ad__student__app__section__two__entry__status__icon"
                       }
                     />{" "}
-                    {result[i].status}
+                    {item.status}
                   </span>
                 </h1>
               </div>

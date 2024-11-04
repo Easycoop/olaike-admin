@@ -3,7 +3,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { useDispatcher } from "../../utils/useDispatcher";
 import {
   getApplications,
+  getLoanApplications,
   getSingleApplication,
+  getSingleLoanApplication,
+  updateLoanApplication,
   updateUserApplication,
 } from "../../services/applicationService";
 
@@ -43,8 +46,50 @@ export const doUpdateUserApplication = createAsyncThunk(
   }
 );
 
+export const doGetLoanApplications = createAsyncThunk(
+  "applications/doGetLoanApplications",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await getLoanApplications();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
+export const doGetSingleLoanApplication = createAsyncThunk(
+  "applications/doGetSingleLoanApplication",
+  async (id, { rejectWithValue }) => {
+    try {
+      const data = await getSingleLoanApplication(id);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
+export const doUpdateLoanApplication = createAsyncThunk(
+  "applications/doUpdateLoanApplication",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const data = await updateLoanApplication(payload);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
 export const useGetApplications = () => useDispatcher(doGetApplications);
 export const useGetSingleApplication = () =>
   useDispatcher(doGetSingleApplication);
 export const useUpdateUserApplication = () =>
   useDispatcher(doUpdateUserApplication);
+export const useGetLoanApplications = () =>
+  useDispatcher(doGetLoanApplications);
+export const useGetSingleLoanApplication = () =>
+  useDispatcher(doGetSingleLoanApplication);
+export const useUpdateLoanApplication = () =>
+  useDispatcher(doUpdateLoanApplication);

@@ -1,34 +1,89 @@
+import { useEffect, useState } from "react";
 import "./Admin.single.loan.application.css";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useGetSingleLoanApplication,
+  useUpdateLoanApplication,
+} from "../../redux/actions/applicationAction";
+import toastManager from "../../components/ui/toast/ToasterManager";
 
 function SingleLoanApplications() {
-  const result = {
-    id: 1,
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1 1234567890",
-    amount: "₦250,000",
-    status: "pending",
-    userId: "144f-125f-fdg",
-    date: "12th July, 2024",
+  const getSingleLoanApplication = useGetSingleLoanApplication();
+  const updateLoanApplication = useUpdateLoanApplication();
+  const { applicationId } = useParams();
+  const [result, setResult] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+
+  const submit = async (param) => {
+    setLoading(true);
+
+    const payload = {
+      action: param,
+      id: result.id,
+      amount: result.amount,
+      userId: result.userId,
+    };
+    try {
+      const response = await updateLoanApplication(payload);
+
+      if (response?.payload.success === true) {
+        setErrorMessage("");
+        navigate(-1);
+        return;
+      } else {
+        setErrorMessage(response.message);
+        toastManager.addToast({
+          message: "Internal server error",
+          type: "error",
+        });
+      }
+    } catch (error) {
+      setErrorMessage(error.response.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const submit = (param) => {};
+  const handleGetSingleLoanApplication = async () => {
+    setLoading(true);
+    try {
+      const response = await getSingleLoanApplication(applicationId);
+
+      if (response?.payload?.data.application) {
+        setErrorMessage("");
+        setResult(response.payload.data.application);
+        return;
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (error) {
+      setErrorMessage(error.response.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleGetSingleLoanApplication();
+  }, []);
 
   return (
     <>
       <div className="si__st__app">
         <section className="admin__single__notice__section__one">
           <article className="admin__single__notice__section__one__article1">
-            <h1>{`Loan application from ${result.name}`}</h1>
+            <h1>{`Loan application from ${result.firstName} ${result.lastName}`}</h1>
           </article>
           <article className="admin__single__notice__section__one__article2">
             <span>
               <h1>Application Date</h1>
-              <h3>{result.date}</h3>
+              <h3>{result.createdAt}</h3>
             </span>
             <span>
               <h1>User Name</h1>
-              <h3>{result.name}</h3>
+              <h3>{`${result.firstName} ${result.lastName}`}</h3>
             </span>
             <span>
               <h1>Application Number</h1>
@@ -39,8 +94,80 @@ function SingleLoanApplications() {
               <h3>{result.amount}</h3>
             </span>
             <span>
-              <h1>User Id</h1>
-              <h3>{result.userId}</h3>
+              <h1>Email</h1>
+              <h3>{result.email}</h3>
+            </span>
+            <span>
+              <h1>Phone</h1>
+              <h3>{result.phone}</h3>
+            </span>
+            <span>
+              <h1>Date of Birth</h1>
+              <h3>{result.dob}</h3>
+            </span>
+            <span>
+              <h1>Address</h1>
+              <h3>{result.address}</h3>
+            </span>
+            <span>
+              <h1>Employment Status</h1>
+              <h3>{result.employmentStatus}</h3>
+            </span>
+            <span>
+              <h1>Employer Name</h1>
+              <h3>{result.employerName}</h3>
+            </span>
+            <span>
+              <h1>Job Title</h1>
+              <h3>{result.jobTitle}</h3>
+            </span>
+            <span>
+              <h1>Employment Address</h1>
+              <h3>{result.employmentAddress}</h3>
+            </span>
+            <span>
+              <h1>Next of Kin Name</h1>
+              <h3>{`${result.nokFirstName} ${result.nokLastName}`}</h3>
+            </span>
+            <span>
+              <h1>Next of Kin Email</h1>
+              <h3>{result.nokEmail}</h3>
+            </span>
+            <span>
+              <h1>Next of Kin Phone</h1>
+              <h3>{result.nokPhone}</h3>
+            </span>
+            <span>
+              <h1>Next of Kin Relationship</h1>
+              <h3>{result.nokRelationship}</h3>
+            </span>
+            <span>
+              <h1>Bank Verification Number</h1>
+              <h3>{result.bvn}</h3>
+            </span>
+            <span>
+              <h1>Guarantor Name</h1>
+              <h3>{`${result.guarantorFirstName} ${result.guarantorLastName}`}</h3>
+            </span>
+            <span>
+              <h1>Guarantor Email</h1>
+              <h3>{result.guarantorEmail}</h3>
+            </span>
+            <span>
+              <h1>Guarantor Phone</h1>
+              <h3>{result.guarantorPhone}</h3>
+            </span>
+            <span>
+              <h1>Guarantor Occupation</h1>
+              <h3>{result.guarantorOccupation}</h3>
+            </span>
+            <span>
+              <h1>Guarantor Home Address</h1>
+              <h3>{result.guarantorHomeAddress}</h3>
+            </span>
+            <span>
+              <h1>Guarantor Office Address</h1>
+              <h3>{result.guarantorOfficeAddress}</h3>
             </span>
             <span>
               <h1>Status</h1>

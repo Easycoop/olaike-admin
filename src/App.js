@@ -26,6 +26,7 @@ import AdminCreateRole from "./pages/admin.create.role/Admin.create.role";
 import AdminWithdrawalRequest from "./pages/admin.withdrawal.request/Admin.withdrawal.request";
 import AdminSendMoney from "./pages/admin.send.money/Send.money";
 import AdminUpdateSociety from "./pages/Admin.update.society/Admin.update.society";
+import SingleWithdrawalRequest from "./pages/admin.single.withdrawal.request/Admin.single.withdrawal.request";
 
 function App() {
   const { theme } = useContext(StateContext);
@@ -44,6 +45,10 @@ function App() {
               <Route
                 path="withdrawal-requests"
                 element={<AdminWithdrawalRequest />}
+              />
+              <Route
+                path="withdrawal-request/:requestId"
+                element={<SingleWithdrawalRequest />}
               />
               <Route path="societies" element={<AdminSocieties />} />
               <Route path="user/:userId" element={<AdminSingleUser />} />

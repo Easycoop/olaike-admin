@@ -4,21 +4,21 @@ import { PiCircleFill } from "react-icons/pi";
 import { FaFileCircleCheck } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useGetApplications } from "../../redux/actions/applicationAction";
 import Loading from "../../components/splash/loading/Loading";
 import NoResult from "../../components/splash/no-result/NoResult";
+import { useGetRequests } from "../../redux/actions/withdrawRequestAction";
 
 function AdminWithdrawalRequest() {
-  const getApplications = useGetApplications();
+  const getRequests = useGetRequests();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [result, setResult] = useState([]);
   const navigate = useNavigate();
 
-  const handleGetApplications = async () => {
+  const handleGetRequests = async () => {
     setLoading(true);
     try {
-      const response = await getApplications();
+      const response = await getRequests();
       if (response?.payload.success === true) {
         setErrorMessage("");
         setResult(response.payload.data.result);
@@ -34,7 +34,7 @@ function AdminWithdrawalRequest() {
   };
 
   useEffect(() => {
-    handleGetApplications();
+    handleGetRequests();
   }, []);
 
   return (
@@ -65,7 +65,7 @@ function AdminWithdrawalRequest() {
                 <h1>
                   {
                     result.filter(function (item, i) {
-                      if (result[i].status == "success") {
+                      if (result[i].status == "successful") {
                         return result[i];
                       }
                     }).length
@@ -95,7 +95,7 @@ function AdminWithdrawalRequest() {
                 <h1>
                   {
                     result.filter(function (item, i) {
-                      if (result[i].status == "failed") {
+                      if (result[i].status == "unsuccessful") {
                         return result[i];
                       }
                     }).length
@@ -122,10 +122,10 @@ function AdminWithdrawalRequest() {
                 Request ID
               </h1>
               <h1 className="ad__student__app__section__two__header__university">
-                Name
+                User ID
               </h1>
               <h1 className="ad__student__app__section__two__header__universityemail">
-                Email
+                Request reason
               </h1>
 
               <h1 className="ad__student__app__section__two__header__userid">
@@ -141,7 +141,7 @@ function AdminWithdrawalRequest() {
                 <div
                   className="ad__student__app__section__two__entry"
                   onClick={() => {
-                    navigate(`/main/registration-application/${result[i].id}`);
+                    navigate(`/main/withdrawal-request/${result[i].id}`);
                   }}
                 >
                   <h1 className="ad__student__app__section__two__entry__date">
@@ -151,22 +151,22 @@ function AdminWithdrawalRequest() {
                     {result[i].id}
                   </h1>
                   <h1 className="ad__student__app__section__two__entry__university">
-                    {`${result[i].firstName} ${result[i].lastName}`}
+                    {item.userId}
                   </h1>
                   <h1 className="ad__student__app__section__two__entry__universityemail">
-                    {result[i].email}
+                    {result[i].reason}
                   </h1>
 
                   <h1 className="ad__student__app__section__two__entry__userid">
-                    EndUser
+                    {result[i].amount}
                   </h1>
                   <h1 className="ad__student__app__section__two__entry__status">
                     <span>
                       <PiCircleFill
                         className={
-                          result[i].status == "success"
+                          result[i].status == "successful"
                             ? "ad__student__app__section__two__entry__status__icon successful"
-                            : result[i].status == "failed"
+                            : result[i].status == "unsuccessful"
                             ? "ad__student__app__section__two__entry__status__icon unsuccessful"
                             : "ad__student__app__section__two__entry__status__icon"
                         }
