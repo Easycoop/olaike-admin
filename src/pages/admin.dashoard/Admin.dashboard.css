@@ -36,7 +36,7 @@
 .admin__dashboard__section__one__seg > span {
   margin-bottom: 10px;
   font-size: var(--font-size-secondary);
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
 }
@@ -68,37 +68,16 @@
 .admin__dashboard__section__two__seg1 > h4 {
   font-size: var(--font-size-secondary);
   font-weight: 500;
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
   margin-bottom: 15px;
   padding: 0 20px;
 }
 .admin__dashboard__section__two__seg1 > p {
-  font-size: var(--font-size-secondary);
-  font-weight: 500;
-  color: var(--tertiary-text-color);
+  font-size: var(--font-size-primary);
+  font-weight: 300;
+  color: var(--color-text-secondary);
   padding: 0 20px;
-}
-.admin__dashboard__section__two__seg1 > span {
-  border-top: 1px solid var(--color-border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  padding: 20px 20px;
-}
-.admin__dashboard__section__two__seg1 > span > div {
-}
-.admin__dashboard__section__two__seg1 > span > div > h3 {
-  font-size: 11px;
-  font-weight: 500;
-  margin-bottom: 5px;
-  color: var(--tertiary-text-color);
-}
-.admin__dashboard__section__two__seg1 > span > div > h4 {
-  font-size: var(--font-size-secondary);
-  color: var(--color-text-primary);
-
-  font-weight: 500;
+  margin-bottom: var(--spacing-medium);
 }
 .admin__dashboard__section__two__seg1__notice {
   margin-top: 10px;
@@ -109,7 +88,7 @@
   font-size: 15px;
   font-weight: 500;
   margin-bottom: 15px;
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
 }
@@ -122,7 +101,7 @@
   font-size: var(--font-size-secondary);
   font-weight: 500;
   margin-left: 15px;
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
 }
 .admin__dashboard__section__two__seg1__notice > div > div {
   /* width: 25px; */
@@ -225,38 +204,38 @@
 .admin__dashboard__section__three__seg2__entry__id {
   width: 15%;
   font-size: var(--font-size-secondary);
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 .admin__dashboard__section__three__seg2__entry__title {
   width: 25%;
   font-size: var(--font-size-secondary);
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 .admin__dashboard__section__three__seg2__entry__views {
   width: 15%;
   font-size: var(--font-size-secondary);
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 .admin__dashboard__section__three__seg2__entry__propertytype {
   width: 15%;
   font-size: var(--font-size-secondary);
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .admin__dashboard__section__three__seg2__entry__userid {
   width: 20%;
   font-size: var(--font-size-secondary);
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 .admin__dashboard__section__three__seg2__entry__ranking {
   width: 10%;
   font-size: var(--font-size-secondary);
-  color: var(--tertiary-text-color);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 

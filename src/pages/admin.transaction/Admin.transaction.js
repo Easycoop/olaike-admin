@@ -20,6 +20,38 @@ function AdminTransaction() {
 
   const [transactions, setTransactions] = useState([]);
 
+  function calculateTransactionSums(transactions) {
+    let totalCredit = 0;
+    let totalDebit = 0;
+
+    transactions.forEach((transaction) => {
+      const amount = parseFloat(transaction.amount);
+
+      if (transaction.type === "credit") {
+        totalCredit += amount;
+      } else if (transaction.type === "debit") {
+        totalDebit += amount;
+      }
+    });
+
+    const overallSum = totalCredit - totalDebit;
+
+    return {
+      totalCredit: totalCredit.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+      }),
+      totalDebit: totalDebit.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+      }),
+      overallSum: overallSum.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+      }),
+    };
+  }
+
+  const { totalCredit, totalDebit, overallSum } =
+    calculateTransactionSums(transactions);
+
   const handleGetTransactions = async () => {
     setLoading(true);
     try {
@@ -27,7 +59,6 @@ function AdminTransaction() {
       if (response?.payload.status == "success") {
         setErrorMessage("");
         setTransactions(response.payload.data.result);
-        console.log(response.payload.data.result);
         return;
       } else {
         setErrorMessage(response.message);
@@ -61,21 +92,21 @@ function AdminTransaction() {
               <TbSum className="admin__transaction__section__one__card__icon" />
               <div>
                 <h3>Total transactions</h3>
-                <h1>#1,222,843</h1>
+                <h1>₦ {overallSum}</h1>
               </div>
             </div>
             <div className="admin__transaction__section__one__card">
               <MdOutlineCallMissedOutgoing className="admin__transaction__section__one__card__icon" />
               <div>
                 <h3>Outgoings</h3>
-                <h1>#552,843</h1>
+                <h1>₦ {totalDebit}</h1>
               </div>
             </div>
             <div className="admin__transaction__section__one__card">
               <MdOutlineCallReceived className="admin__transaction__section__one__card__icon" />
               <div>
                 <h3>Incomings</h3>
-                <h1>#789,653</h1>
+                <h1>₦ {totalCredit}</h1>
               </div>
             </div>
           </article>
@@ -114,7 +145,11 @@ function AdminTransaction() {
                 <h1 className="admin__transaction__section__two__entry__invoice">
                   {transactions[i].id}
                 </h1>
-                <h1 className="admin__transaction__section__two__entry__ammount">{`₦${transactions[i].amount}`}</h1>
+                <h1 className="admin__transaction__section__two__entry__ammount">{`₦ ${transactions[
+                  i
+                ].amount.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                })}`}</h1>
                 <h1 className="admin__transaction__section__two__entry__property">
                   {transactions[i].description}
                 </h1>
