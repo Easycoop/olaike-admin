@@ -1,29 +1,68 @@
 import "./Admin.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { MdOutlinePayment } from "react-icons/md";
-import { IoMdSettings } from "react-icons/io";
+import { MdGroups, MdOutlinePayment, MdPhonelinkSetup } from "react-icons/md";
+import { IoMdClose, IoMdSend, IoMdSettings } from "react-icons/io";
 import { BiMenu } from "react-icons/bi";
-import { FaPowerOff, FaUser, FaUserPlus } from "react-icons/fa";
-import { RiDashboardFill } from "react-icons/ri";
+import {
+  FaCreditCard,
+  FaMoneyBill,
+  FaPowerOff,
+  FaUser,
+  FaUserPlus,
+} from "react-icons/fa";
+import { RiDashboardFill, RiMenuFoldFill } from "react-icons/ri";
 import logo from "../../assets/icons/logo-secondary-color1.png";
 import DashboardFooter from "../../components/layout/footer/Dashboard.footer";
 import DashboardHeader from "../../components/layout/header/Dashboard.header";
 import { useSelector } from "react-redux";
+import { useLogout } from "../../redux/actions/authActions";
+import toastManager from "../../components/ui/toast/ToasterManager";
+import { TbArrowBarLeft } from "react-icons/tb";
+import { HiMiniTableCells } from "react-icons/hi2";
+import { BsNodePlusFill } from "react-icons/bs";
+import { LiaHourglassEndSolid } from "react-icons/lia";
 
 function Admin() {
   const { roles } = useSelector((state) => state.auth);
   const isSuperAdmin = roles?.includes("SuperAdmin");
+  const logout = useLogout();
   const navigate = useNavigate();
-  const [active, SetActive] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [active, setActive] = useState(false);
   const [dropdown, setDropdown] = useState({
     create: false,
     applications: false,
   });
 
   const [path, setPath] = useState("dashboard");
-  const logout = async () => {
-    navigate("/");
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await logout();
+      if (response.status === true || response.status === "success") {
+        setErrorMessage("");
+
+        toastManager.addToast({
+          message: "Logout successful",
+          type: "success",
+        });
+        navigate("/");
+        return;
+      } else {
+        setErrorMessage(response.message);
+        toastManager.addToast({
+          message: "Logout unsuccessful",
+          type: "error",
+        });
+      }
+    } catch (error) {
+      setErrorMessage(error.response.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const [colorId, setColorId] = useState(1);
@@ -43,14 +82,22 @@ function Admin() {
                 : "dashboard__header__logo"
             }
           />
-          <BiMenu
-            className={active ? "dashboard__menu active" : "dashboard__menu"}
-            onClick={() => SetActive(!active)}
-          />
+          {!active ? (
+            <RiMenuFoldFill
+              className={active ? "dashboard__menu active" : "dashboard__menu"}
+              onClick={() => setActive(!active)}
+            />
+          ) : (
+            <BiMenu
+              className={active ? "dashboard__menu active" : "dashboard__menu"}
+              onClick={() => setActive(!active)}
+            />
+          )}
         </section>
         <section className="dashboard__navbar__section__two">
           <div
             onClick={() => {
+              // setActive(!active);
               setPath("Dashboard");
               navigate("/main/dashboard");
               setColorId(1);
@@ -62,6 +109,7 @@ function Admin() {
           </div>
           <div
             onClick={() => {
+              // setActive(!active);
               setPath("User");
               navigate("/main/users");
               setColorId(2);
@@ -73,6 +121,7 @@ function Admin() {
           </div>
           <div
             onClick={() => {
+              // setActive(!active);
               setPath("Transactions");
               navigate("/main/transaction");
               setColorId(3);
@@ -85,40 +134,44 @@ function Admin() {
           {isSuperAdmin && (
             <div
               onClick={() => {
+                // setActive(!active);
                 setPath("Societies");
                 setColorId(123);
                 navigate("/main/societies");
               }}
               className={colorId === 123 ? "dashboard__navbar__active" : ""}
             >
-              <FaUserPlus className="dashboard__navbar__icon" />
+              <MdGroups className="dashboard__navbar__icon" />
               <h3>Societies</h3>
             </div>
           )}
           <div
             onClick={() => {
+              // setActive(!active);
               setPath("Deposit");
               setColorId(143);
               navigate("/main/deposit-money");
             }}
             className={colorId === 143 ? "dashboard__navbar__active" : ""}
           >
-            <FaUserPlus className="dashboard__navbar__icon" />
+            <FaCreditCard className="dashboard__navbar__icon" />
             <h3>Deposit money</h3>
           </div>
           <div
             onClick={() => {
+              // setActive(!active);
               setPath("Send money");
               setColorId(108);
               navigate("/main/send-money");
             }}
             className={colorId === 108 ? "dashboard__navbar__active" : ""}
           >
-            <FaUserPlus className="dashboard__navbar__icon" />
+            <IoMdSend className="dashboard__navbar__icon" />
             <h3>Send money</h3>
           </div>
           <div
             onClick={() => {
+              // setActive(!active);
               setPath("Create user");
               setColorId(9);
               navigate("/main/create-user");
@@ -131,13 +184,14 @@ function Admin() {
           {isSuperAdmin && (
             <div
               onClick={() => {
+                // setActive(!active);
                 setPath("Create role");
                 setColorId(186);
                 navigate("/main/create-role");
               }}
               className={colorId === 186 ? "dashboard__navbar__active" : ""}
             >
-              <FaUserPlus className="dashboard__navbar__icon" />
+              <HiMiniTableCells className="dashboard__navbar__icon" />
               <h3>Create new role</h3>
             </div>
           )}
@@ -145,53 +199,58 @@ function Admin() {
           {isSuperAdmin && (
             <div
               onClick={() => {
+                // setActive(!active);
                 setPath("Create Society");
                 setColorId(103);
                 navigate("/main/create-society");
               }}
               className={colorId === 103 ? "dashboard__navbar__active" : ""}
             >
-              <FaUserPlus className="dashboard__navbar__icon" />
+              <BsNodePlusFill className="dashboard__navbar__icon" />
               <h3>Create new society</h3>
             </div>
           )}
           <div
             onClick={() => {
+              // setActive(!active);
               setPath("Withdrawal requests");
               setColorId(39);
               navigate("/main/withdrawal-requests");
             }}
             className={colorId === 39 ? "dashboard__navbar__active" : ""}
           >
-            <FaUserPlus className="dashboard__navbar__icon" />
+            <FaMoneyBill className="dashboard__navbar__icon" />
             <h3>withdrawal requests</h3>
           </div>
           <div
             onClick={() => {
+              // setActive(!active);
               setPath("Registration applications");
               setColorId(23);
               navigate("/main/registration-applications");
             }}
             className={colorId === 23 ? "dashboard__navbar__active" : ""}
           >
-            <FaUserPlus className="dashboard__navbar__icon" />
+            <MdPhonelinkSetup className="dashboard__navbar__icon" />
             <h3>Registration applications</h3>
           </div>
           <div
             onClick={() => {
+              // setActive(!active);
               setPath("Loan applications");
               setColorId(12);
               navigate("/main/loan-applications");
             }}
             className={colorId === 12 ? "dashboard__navbar__active" : ""}
           >
-            <FaUserPlus className="dashboard__navbar__icon" />
+            <LiaHourglassEndSolid className="dashboard__navbar__icon" />
             <h3>Loan applications</h3>
           </div>
         </section>
         <section className="dashboard__navbar__section__three">
           <div
             onClick={() => {
+              // setActive(!active);
               navigate("/main/setting");
               setColorId(16);
             }}
@@ -201,7 +260,7 @@ function Admin() {
             <h3>Settings</h3>
           </div>
           <div
-            onClick={logout}
+            onClick={handleLogout}
             className={colorId === 77 ? "dashboard__navbar__active" : ""}
           >
             <FaPowerOff className="dashboard__navbar__icon" />

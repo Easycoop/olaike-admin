@@ -27,6 +27,8 @@ import AdminWithdrawalRequest from "./pages/admin.withdrawal.request/Admin.withd
 import AdminSendMoney from "./pages/admin.send.money/Send.money";
 import AdminUpdateSociety from "./pages/Admin.update.society/Admin.update.society";
 import SingleWithdrawalRequest from "./pages/admin.single.withdrawal.request/Admin.single.withdrawal.request";
+import PrivateRoute from "./route/privateRoute";
+import PublicRoute from "./route/publicRoute";
 
 function App() {
   const { theme } = useContext(StateContext);
@@ -37,53 +39,59 @@ function App() {
         <ScrollToTop />
         <ErrorBoundary>
           <Routes>
-            <Route path="/main" element={<Admin />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="dashboard" element={<AdminDashboard />} />
-              <Route path="users" element={<DashboardUser />} />
-              <Route path="transaction" element={<AdminTransaction />} />
-              <Route
-                path="withdrawal-requests"
-                element={<AdminWithdrawalRequest />}
-              />
-              <Route
-                path="withdrawal-request/:requestId"
-                element={<SingleWithdrawalRequest />}
-              />
-              <Route path="societies" element={<AdminSocieties />} />
-              <Route path="user/:userId" element={<AdminSingleUser />} />
-              <Route path="edit-user/:userId" element={<AdminEditUser />} />
-              <Route path="setting" element={<AdminSettings />} />
-              <Route path="deposit-money" element={<Payment />} />
-              <Route path="create-user" element={<AdminCreateUser />} />
-              <Route path="create-role" element={<AdminCreateRole />} />
-              <Route path="create-society" element={<AdminCreateSociety />} />
-              <Route
-                path="edit-society/:societyId"
-                element={<AdminUpdateSociety />}
-              />
-              <Route path="send-money" element={<AdminSendMoney />} />
-              <Route
-                path="loan-applications"
-                element={<AdminLoanApplication />}
-              />
-              <Route
-                path="loan-application/:applicationId"
-                element={<SingleLoanApplications />}
-              />
-              <Route
-                path="registration-applications"
-                element={<AdminRegistrationApplication />}
-              />
-              <Route
-                path="registration-application/:applicationId"
-                element={<SingleRegistrationApplications />}
-              />
+            {/* PRIVATE ROUTES */}
+            <Route path="/" element={<PrivateRoute />}>
+              <Route path="/main" element={<Admin />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="users" element={<DashboardUser />} />
+                <Route path="transaction" element={<AdminTransaction />} />
+                <Route
+                  path="withdrawal-requests"
+                  element={<AdminWithdrawalRequest />}
+                />
+                <Route
+                  path="withdrawal-request/:requestId"
+                  element={<SingleWithdrawalRequest />}
+                />
+                <Route path="societies" element={<AdminSocieties />} />
+                <Route path="user/:userId" element={<AdminSingleUser />} />
+                <Route path="edit-user/:userId" element={<AdminEditUser />} />
+                <Route path="setting" element={<AdminSettings />} />
+                <Route path="deposit-money" element={<Payment />} />
+                <Route path="create-user" element={<AdminCreateUser />} />
+                <Route path="create-role" element={<AdminCreateRole />} />
+                <Route path="create-society" element={<AdminCreateSociety />} />
+                <Route
+                  path="edit-society/:societyId"
+                  element={<AdminUpdateSociety />}
+                />
+                <Route path="send-money" element={<AdminSendMoney />} />
+                <Route
+                  path="loan-applications"
+                  element={<AdminLoanApplication />}
+                />
+                <Route
+                  path="loan-application/:applicationId"
+                  element={<SingleLoanApplications />}
+                />
+                <Route
+                  path="registration-applications"
+                  element={<AdminRegistrationApplication />}
+                />
+                <Route
+                  path="registration-application/:applicationId"
+                  element={<SingleRegistrationApplications />}
+                />
+              </Route>
             </Route>
 
-            <Route path="/" element={<Login />} />
+            {/* PUBLIC ROUTES */}
+            <Route path="/" element={<PublicRoute />}>
+              <Route index element={<Login />} />
+            </Route>
 
-            {/* Catch all route */}
+            {/* CATCH ALL ROUTES*/}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>

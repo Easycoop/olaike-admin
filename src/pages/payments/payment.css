@@ -1,29 +1,52 @@
 .payment {
+  background-color: var(--color-border);
+  min-height: 100vh;
+}
+.payment__section__one {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 20px 20px;
+}
+.payment__section__one__block {
+  width: 30%;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--border-radius-medium);
+  background-color: white;
+  cursor: pointer;
+}
+.payment__section__one__block:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+    /* light outer shadow */ 0 12px 24px rgba(0, 0, 0, 0.05); /* deeper, softer shadow */
+}
+.payment__section__one__block > div {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  gap: var(--spacing-medium);
-  text-align: center;
 }
-.payment > img {
-  object-fit: contain;
-  width: 500px;
+.payment__section__one__block > div > h5 {
+  font-size: var(--font-size-primary);
+  font-weight: 600;
 }
-.payment > p {
+.payment__section__one__block > div > p {
   font-size: var(--font-size-secondary);
-  line-height: 30px;
-  font-weight: 500;
-  width: 40%;
+  color: var(--color-text-secondary);
+}
+.payment__section__one__block > img {
+  object-fit: contain;
+  width: 100px;
+  height: 100px;
 }
 
 @media all and (max-width: 768px) {
-  .payment > img {
-    object-fit: contain;
-    width: 100%;
+  .payment__section__one {
+    flex-direction: column;
+    gap: 20px;
   }
-  .payment > p {
+  .payment__section__one__block {
     width: 100%;
+    padding: 20px 20px;
   }
 }

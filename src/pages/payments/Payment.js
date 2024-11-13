@@ -122,14 +122,18 @@ function Payment() {
   };
   return (
     <div className="payment">
-      <img src={payment} alt="payment" />
-      {/* <p>Fund your wallet now!</p> */}
-      <Button
-        className="modal__withdraw1__button"
-        onClick={() => handleModalClick("fund")}
-      >
-        Fund wallet
-      </Button>
+      <section className="payment__section__one">
+        <div
+          className="payment__section__one__block"
+          onClick={() => handleModalClick("fund")}
+        >
+          <div>
+            <h5>Deposit</h5>
+            <p>Fund society wallet</p>
+          </div>
+          <img src={payment} />
+        </div>
+      </section>
 
       {/* FUND AMOUNT MODAL */}
       <Modal isOpen={isOpen.fund} onClose={closeModal}>
@@ -147,7 +151,7 @@ function Payment() {
             <h5 className="modal__withdraw1__error">{errorMessage}</h5>
           )}
           <Button className="modal__withdraw1__button" onClick={handleFund}>
-            {loading ? <ClipLoader color="#fff" size={20} /> : "Fund wallet"}
+            {loading ? <ClipLoader color="#fff" size={20} /> : "Fund  wallet"}
           </Button>
         </div>
       </Modal>
