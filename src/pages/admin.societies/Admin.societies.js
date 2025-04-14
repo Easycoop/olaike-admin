@@ -1,20 +1,29 @@
 import "./Admin.societies.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { PiCircleFill } from "react-icons/pi";
-import { useRef } from "react";
+import ReactDOM from 'react-dom';
+import Modal from 'react-modal';
 import Loading from "../../components/splash/loading/Loading";
 import NoResult from "../../components/splash/no-result/NoResult";
 import { useNavigate } from "react-router-dom";
-import { useGetSocieties } from "../../redux/actions/societyAction";
+import { useGetSocieties, useGetSocietyMembers } from "../../redux/actions/societyAction";
+import {useAssignRole} from '../../redux/actions/userAction';
 import { BiPen } from "react-icons/bi";
 import { BsPen } from "react-icons/bs";
 
 function AdminSocieties() {
   const lastTransaction = useRef();
   const getSocieties = useGetSocieties();
+  const getSocietyMembers = useGetSocietyMembers();
+  const assignRole = useAssignRole();
+
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [result, setResult] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [groupMembers, setGroupMembers] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
   const navigate = useNavigate();
 
   const handleGetSocieties = async () => {
@@ -37,6 +46,73 @@ function AdminSocieties() {
     } finally {
     }
   };
+
+  const getGroupMembers = async (groupId) =>{
+    try {
+      const response = await getSocietyMembers(groupId);
+
+      if (
+        response?.payload.status === 200 ||
+        response?.payload.status === "success"
+      ) {
+        setErrorMessage("");
+
+        setGroupMembers(response.payload.data);
+        return;
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  const updateUserRole = async () => {
+    try {
+      const user_id = selectedUserId;
+      const role_name = "Admin";
+      const response = await assignRole({user_id, role_name});
+
+      if (
+        response?.payload.status === 200 ||
+        response?.payload.status === "success"
+      ) {
+        setErrorMessage("");
+        setModalIsOpen(false);
+        handleGetSocieties();
+        return;
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  const adminUsers = (group) => {
+    return group?.AdminUsers.filter(user => {
+      // Check if the user has a 'Roles' array and if it's not empty
+      if (user.Roles && user.Roles.length > 0) {
+        // Use the 'some' method to check if at least one role has the name 'Admin'
+        return user.Roles.some(role => role.name === "Admin");
+      }
+      // If no Roles array or it's empty, return false
+      return false;
+    });
+  }
+
+  function openModal(groupId){
+    console.log(groupId);
+    getGroupMembers(groupId);
+    setModalIsOpen(true);
+  }
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    
+  
+  }
 
   useEffect(() => {
     handleGetSocieties();
@@ -93,30 +169,30 @@ function AdminSocieties() {
                   useRef={lastTransaction}
                 >
                   <h1 className="admin__transaction__section__two__entry__date">
-                    {result[i].createdAt}
+                    {item.createdAt}
                   </h1>
                   <h1 className="admin__transaction__section__two__entry__invoice">
-                    {result[i].id}
+                    {item.id}
                   </h1>
                   <h1 className="admin__transaction__section__two__entry__ammount">
-                    {result[i].name}
+                    {item.name}
                   </h1>
                   <h1 className="admin__transaction__section__two__entry__property">
-                    {result[i].description}
+                    {item.description}
                   </h1>
 
                   <h1 className="admin__transaction__section__two__entry__userid">
                     <span>
                       <PiCircleFill
                         className={
-                          result[i].isActive == "true"
+                          item.isActive == "true"
                             ? "ad__student__app__section__two__entry__status__icon successsful"
-                            : result[i].isActive == "false"
+                            : item.isActive == "false"
                             ? "ad__student__app__section__two__entry__status__icon unsuccesssful"
                             : "ad__student__app__section__two__entry__status__icon"
                         }
                       />
-                      {result[i].isActive}
+                      {item.isActive}
                     </span>
                   </h1>
                   <h1
@@ -126,11 +202,53 @@ function AdminSocieties() {
                     Edit
                     <BsPen />
                   </h1>
+                  {item?.AdminUsers.length == 0 && 
+                    <button className="btn btn-primary" onClick={()=>openModal(item.id)}> Add an admin</button>
+                  }
+                  
                 </div>
               );
             })}
           </section>
         )}
+
+        <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={()=>setModalIsOpen(false)}
+          style={{
+            content: {
+              top: '50%',
+              left: '50%',
+              right: 'auto',
+              bottom: 'auto',
+              marginRight: '-50%',
+              transform: 'translate(-50%, -50%)',
+              minWidth:'35vw',
+            },
+          }}
+          contentLabel="Example Modal"
+        >
+          <div style={{display:"flex", justifyContent:"space-between"}}>
+            <h3 >Attach an admin </h3>
+            <button onClick={()=>setModalIsOpen(false)} className="btn-danger btn">close</button>
+          </div>
+          
+          
+          <form>
+            <div className="form-group">
+              <label>Select an admin</label>
+              <select className="form-control" onChange={(e)=>setSelectedUserId(e.target.value)}>
+                <option selected disabled>Select a member</option>
+                {groupMembers.map((item, i) => (
+                  <option value={item.id} key={i}>{item.firstName} {item.lastName}</option>
+                ))}
+              </select>
+            </div>
+
+            <button type="button" className="btn btn-success" onClick={updateUserRole}>Update</button>
+          </form>
+        </Modal>
       </div>
     </>
   );

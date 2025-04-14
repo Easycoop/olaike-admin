@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { useDispatcher } from "../../utils/useDispatcher";
 import {
+  assignRole,
   createUsers,
   getUser,
   getUsers,
@@ -56,7 +57,20 @@ export const doCreateUsers = createAsyncThunk(
   }
 );
 
+export const doAssignRole = createAsyncThunk(
+  "users/doCreateUsers",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const data = await assignRole(payload);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
 export const useGetUsers = () => useDispatcher(doGetUsers);
 export const useGetUser = () => useDispatcher(doGetUser);
 export const useUpdateUser = () => useDispatcher(doUpdateUser);
 export const useCreateUsers = () => useDispatcher(doCreateUsers);
+export const useAssignRole = () => useDispatcher(doAssignRole);

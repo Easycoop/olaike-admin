@@ -9,6 +9,8 @@ import {
 import toastManager from "../../components/ui/toast/ToasterManager";
 import { ClipLoader } from "react-spinners";
 import Loading from "../../components/splash/loading/Loading";
+import {runValidation} from '../../utils/buchi';
+import ValidationError from '../../components/ui/form-elements/ValidaionError';
 
 function AdminUpdateSociety() {
   const getSociety = useGetSociety();
@@ -23,12 +25,13 @@ function AdminUpdateSociety() {
   const [description, setDescription] = useState("");
   const [entranceFee, setEntranceFee] = useState("");
   const [isActive, setIsActive] = useState(true);
+  const [validationErrors, setValidationErrors] = useState();
 
   const handleUpdateSociety = async () => {
-    if (!name || !description || entranceFee) {
-      setErrorMessage("Name or description cannot be empty");
-      return;
-    }
+    // if (!name || !description || entranceFee) {
+    //   setErrorMessage("Name or description cannot be empty");
+    //   return;
+    // }
 
     setLoading(true);
 
@@ -38,7 +41,10 @@ function AdminUpdateSociety() {
         description,
         entranceFee,
         isActive,
+        societyId
       });
+      // console.log(response);
+      
       if (
         response?.payload.status === true ||
         response?.payload.status === "success"
@@ -55,10 +61,10 @@ function AdminUpdateSociety() {
         navigate(-1);
         return;
       } else {
-        setErrorMessage(response.message);
+        setErrorMessage(response?.message);
       }
     } catch (error) {
-      setErrorMessage(error.response.message);
+      setErrorMessage(error?.response?.message);
     } finally {
       setLoading(false);
     }
@@ -69,6 +75,8 @@ function AdminUpdateSociety() {
 
     try {
       const response = await getSociety(societyId);
+      // console.log(response);
+      
       if (
         response?.payload.status === true ||
         response?.payload.status === "success"
@@ -88,9 +96,37 @@ function AdminUpdateSociety() {
     }
   };
 
+  const validateUpdateForm = async () => {
+    
+    const validate = await runValidation([
+        {
+          input: { value: entranceFee, field: "entrance_fee", type: "number" },
+          rules: { required: true },
+        },
+        {
+            input: { value: name, field: "name", type: "text" },
+            rules: { required: true },
+        },
+        {
+            input: { value: description, field: "description", type: "text" },
+            rules: { required: true, min_length:20, },
+        },
+        
+    ]);
+
+    if (validate?.status === false) {
+        
+        setValidationErrors(validate.errors);
+    } else {
+      // alert("kkkkkk")
+      handleUpdateSociety();
+    }
+  }
+
   useEffect(() => {
     handleGetSociety();
   }, []);
+  
 
   return (
     <>
@@ -118,9 +154,7 @@ function AdminUpdateSociety() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
-                {errorMessage && (
-                  <p className="error__message">{errorMessage}</p>
-                )}
+                <ValidationError validationErrors={validationErrors} field='name' />
               </div>
 
               <div className="edit__user__article__div">
@@ -135,6 +169,7 @@ function AdminUpdateSociety() {
                   alt=""
                   onChange={(e) => setDescription(e.target.value)}
                 />
+                <ValidationError validationErrors={validationErrors} field='description' />
               </div>
               <div className="edit__user__article__div">
                 <label>
@@ -148,6 +183,7 @@ function AdminUpdateSociety() {
                   alt=""
                   onChange={(e) => setEntranceFee(e.target.value)}
                 />
+                <ValidationError validationErrors={validationErrors} field='entrance_fee' />
               </div>
               <div className="edit__user__article__div">
                 <label>
@@ -169,7 +205,7 @@ function AdminUpdateSociety() {
           </section>
 
           <span>
-            <button disabled={loading} onClick={handleUpdateSociety}>
+            <button disabled={loading} onClick={validateUpdateForm}>
               {loading ? <ClipLoader color="#fff" size={20} /> : "Edit society"}
             </button>
           </span>
