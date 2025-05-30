@@ -117,9 +117,12 @@ function AdminLoanApplication() {
             <h1 className="ad__student__app__section__two__header__universityemail">
               Amount
             </h1>
+            <h1 className="ad__student__app__section__two__header__university">
+              Society
+            </h1>
 
             <h1 className="ad__student__app__section__two__header__userid">
-              User ID
+              Applicant Phone number
             </h1>
             <h1 className="ad__student__app__section__two__header__status">
               Status
@@ -146,9 +149,11 @@ function AdminLoanApplication() {
                 <h1 className="ad__student__app__section__two__entry__universityemail">
                   {item.amount}
                 </h1>
-
+                <h1 className="ad__student__app__section__two__entry__university">
+                  {item.group?.name}
+                </h1>
                 <h1 className="ad__student__app__section__two__entry__userid">
-                  {item.userId}
+                  {item.phone}
                 </h1>
                 <h1 className="ad__student__app__section__two__entry__status">
                   <span>

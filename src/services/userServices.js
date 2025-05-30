@@ -1,8 +1,8 @@
 import api from "../api/axios";
 
-export const getUsers = async () => {
+export const getUsers = async (page, size=10) => {
   try {
-    const response = await api.get("/user/group");
+    const response = await api.get(`/user/group?page=${page}&size=${size}`);
     return response.data;
   } catch (error) {
     if (error.response) {

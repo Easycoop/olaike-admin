@@ -10,9 +10,10 @@ import {
 
 export const doGetTransactions = createAsyncThunk(
   "transactions/doGetTransactions",
-  async (_, { rejectWithValue }) => {
+  async ({ startDate, endDate, page, size, status, society }, { rejectWithValue }) => {
+ 
     try {
-      const data = await getTransactions();
+      const data = await getTransactions({ startDate, endDate, page, size, status, society });
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Action failed");

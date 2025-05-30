@@ -11,6 +11,7 @@ import { PiCircleFill } from "react-icons/pi";
 import { useSelector } from "react-redux";
 import { useGetApplications } from "../../redux/actions/applicationAction";
 import { useGetDashboardData } from "../../redux/actions/miscAction";
+import {ngDateFormat} from '../../utils/time';
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -23,90 +24,6 @@ function AdminDashboard() {
   const [result, setResult] = useState([]);
   const totalResult = 2;
   const totalUsers = 5;
-
-  // const result = [
-  //   {
-  //     id: 1,
-  //     name: "John Doe",
-  //     email: "john.doe@example.com",
-  //     phone: "+1 1234567890",
-  //     amount: "₦250,000",
-  //     status: "successful",
-  //     userId: "144f-125f-fdg",
-  //     date: "12th July, 2024",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Emmanuel Kant",
-  //     email: "jane.doe@example.com",
-  //     phone: "+2 9876543210",
-  //     amount: "₦300,000",
-  //     status: "successful",
-  //     userId: "144f-125f-fdg",
-  //     date: "12th July, 2024",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "David Smith",
-  //     email: "david.smith@example.com",
-  //     phone: "+3 3333333333",
-  //     amount: "₦200,000",
-  //     status: "successful",
-  //     userId: "144f-125f-fdg",
-  //     date: "12th July, 2024",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Amara Williams",
-  //     email: "amara.williams@example.com",
-  //     phone: "+4 4444444444",
-  //     amount: "₦250,000",
-  //     status: "successful",
-  //     userId: "144f-125f-fdg",
-  //     date: "12th July, 2024",
-  //   },
-  // ];
-  // const notice = [];
-  // const { chartTheme, setChartTheme } = useContext(StateContext);
-
-  //Charts data
-  // const [chart, setChart] = useState({
-  //   options: {
-  //     colors: [`${chartTheme.primaryColor}`, `${chartTheme.secondaryColor}`],
-
-  //     chart: {
-  //       id: "basic-bar",
-  //     },
-  //     xaxis: {
-  //       categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
-  //     },
-  //   },
-
-  //   series: [
-  //     {
-  //       name: "series-1",
-  //       data: [30, 40, 45, 50, 49, 60, 70, 91],
-  //     },
-  //     {
-  //       name: "series-2",
-  //       data: [9, 60, 25, 30, 44, 30, 74, 102],
-  //     },
-  //   ],
-  // });
-  // const [chart2, setChart2] = useState({
-  //   options: {
-  //     chart: {
-  //       id: "basic-bar",
-  //     },
-  //     // xaxis: {
-  //     //   categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
-  //     // },
-  //   },
-  //   series: [44, 55, 41, 17, 15],
-  //   chartOptions: {
-  //     labels: ["Apple", "Mango", "Orange", "Watermelon"],
-  //   },
-  // });
 
   const handleGetApplications = async () => {
     setLoading(true);
@@ -191,13 +108,13 @@ function AdminDashboard() {
             <h1>{data?.transactionVolume}</h1>
           </div>
         </section>
-        <section className="admin__dashboard__section__two">
+         {/*<section className="admin__dashboard__section__two">
           <div className="admin__dashboard__section__two__seg1">
             <p>{`User Id: ${user.id}`}</p>
             <p>{`Name: ${user.firstName} ${user.lastName}`}</p>
-            <p>{`Wallet Id: ${user.walletId}`}</p>
+            <p>{`Wallet Id: ${user.walletId}`}</p> 
           </div>
-          {/* <div className="admin__dashboard__section__two__seg2">
+          <div className="admin__dashboard__section__two__seg2">
             <Chart
               options={chart.options}
               series={chart.series}
@@ -212,8 +129,8 @@ function AdminDashboard() {
               type="scatter"
               width="100%"
             />
-          </div> */}
-        </section>
+          </div> 
+        </section>*/}
         <section className="admin__dashboard__section__three">
           <div
             className="admin__dashboard__section__three__seg2"
@@ -222,18 +139,20 @@ function AdminDashboard() {
             <h1>Registration applications</h1>
             <div className="admin__dashboard__section__three__seg2__header">
               <h1 className="admin__dashboard__section__three__seg2__header__id">
-                Application date
+                Date
               </h1>
-              <h1 className="admin__dashboard__section__three__seg2__header__title">
+              {/* <h1 className="admin__dashboard__section__three__seg2__header__title">
                 Application number
-              </h1>
+              </h1> */}
               <h1 className="admin__dashboard__section__three__seg2__header__views">
                 Name
               </h1>
               <h1 className="admin__dashboard__section__three__seg2__header__propertytype">
                 Email
               </h1>
-
+              <h1 className="admin__dashboard__section__three__seg2__header__views">
+                Society
+              </h1>
               <h1 className="admin__dashboard__section__three__seg2__header__userid">
                 Role
               </h1>
@@ -250,10 +169,8 @@ function AdminDashboard() {
                   }}
                 >
                   <h1 className="admin__dashboard__section__three__seg2__entry__id">
-                    {result[i].createdAt}
-                  </h1>
-                  <h1 className="admin__dashboard__section__three__seg2__entry__title">
-                    {result[i].id}
+                    {ngDateFormat(result[i].createdAt)} 
+                    {/* {result[i].createdAt} */}
                   </h1>
                   <h1 className="admin__dashboard__section__three__seg2__entry__views">
                     {`${result[i].firstName} ${result[i].lastName}`}
@@ -261,6 +178,9 @@ function AdminDashboard() {
 
                   <h1 className="admin__dashboard__section__three__seg2__entry__propertytype">
                     {result[i].email}
+                  </h1>
+                  <h1 className="admin__dashboard__section__three__seg2__entry__views">
+                    {result[i]?.Group?.name}
                   </h1>
                   <h1 className="admin__dashboard__section__three__seg2__entry__userid">
                     EndUser

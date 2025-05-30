@@ -10,6 +10,7 @@ import {
   FaPowerOff,
   FaUser,
   FaUserPlus,
+  FaIdBadge
 } from "react-icons/fa";
 import { RiDashboardFill, RiMenuFoldFill } from "react-icons/ri";
 import logo from "../../assets/icons/logo-secondary-color1.png";
@@ -24,7 +25,7 @@ import { BsNodePlusFill } from "react-icons/bs";
 import { LiaHourglassEndSolid } from "react-icons/lia";
 
 function Admin() {
-  const { roles } = useSelector((state) => state.auth);
+  const { roles, user } = useSelector((state) => state.auth);
   const isSuperAdmin = roles?.includes("SuperAdmin");
   const logout = useLogout();
   const navigate = useNavigate();
@@ -122,6 +123,18 @@ function Admin() {
           <div
             onClick={() => {
               // setActive(!active);
+              setPath("KYC");
+              navigate("/main/kyc");
+              setColorId(31);
+            }}
+            className={colorId === 31 ? "dashboard__navbar__active" : ""}
+          >
+            <FaIdBadge className="dashboard__navbar__icon" />
+            <h3>KYC</h3>
+          </div>
+          <div
+            onClick={() => {
+              // setActive(!active);
               setPath("Transactions");
               navigate("/main/transaction");
               setColorId(3);
@@ -131,20 +144,20 @@ function Admin() {
             <MdOutlinePayment className="dashboard__navbar__icon" />
             <h3>Transaction</h3>
           </div>
-          {isSuperAdmin && (
+          {/* {isSuperAdmin && ( */}
             <div
               onClick={() => {
                 // setActive(!active);
                 setPath("Societies");
                 setColorId(123);
-                navigate("/main/societies");
+                navigate( isSuperAdmin ? "/main/societies" : "/main/edit-society/"+user?.Group?.id);
               }}
               className={colorId === 123 ? "dashboard__navbar__active" : ""}
             >
               <MdGroups className="dashboard__navbar__icon" />
-              <h3>Societies</h3>
+              <h3>Society Management</h3>
             </div>
-          )}
+          {/* )} */}
           <div
             onClick={() => {
               // setActive(!active);

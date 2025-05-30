@@ -6,9 +6,9 @@ const ValidationError = ({validationErrors, field}) => {
             {validationErrors && validationErrors[field] &&
                 validationErrors[field].map((err, index)=>{
                     return (
-                        <>
-                        <span key={index} className="error__message">{err}</span> <br />
-                        </>
+                        <div key={index}>
+                        <span className="error__message">{err}</span> <br />
+                        </div>
                     )
                 })
             }

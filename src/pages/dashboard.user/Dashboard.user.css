@@ -73,47 +73,31 @@
   padding: 15px 15px;
   background: var(--color-primary-tint);
 }
-.dashboard__users__section__two__header__id {
-  width: 20%;
+.dashboard__users__section__two__header h1{
   font-size: var(--font-size-secondary);
   color: var(--color-text-quaternary);
   font-weight: 500;
+}
+.dashboard__users__section__two__header__id {
+  width: 15%;
 }
 .dashboard__users__section__two__header__name {
   width: 20%;
-  font-size: var(--font-size-secondary);
-  color: var(--color-text-quaternary);
-  font-weight: 500;
 }
 .dashboard__users__section__two__header__email {
-  width: 20%;
-  font-size: var(--font-size-secondary);
-  color: var(--color-text-quaternary);
-  font-weight: 500;
+  width: 25%;
 }
 .dashboard__users__section__two__header__role {
   width: 10%;
-  font-size: var(--font-size-secondary);
-  color: var(--color-text-quaternary);
-  font-weight: 500;
 }
 .dashboard__users__section__two__header__status {
   width: 10%;
-  font-size: var(--font-size-secondary);
-  color: var(--color-text-quaternary);
-  font-weight: 500;
 }
 .dashboard__users__section__two__header__created {
   width: 10%;
-  font-size: var(--font-size-secondary);
-  color: var(--color-text-quaternary);
-  font-weight: 500;
 }
 .dashboard__users__section__two__header__action {
   width: 10%;
-  font-size: var(--font-size-secondary);
-  color: var(--color-text-quaternary);
-  font-weight: 500;
 }
 .dashboard__users__section__two__entry {
   width: 100%;
@@ -126,30 +110,25 @@
 .dashboard__users__section__two__entry:hover {
   background: var(--color-border);
 }
-.dashboard__users__section__two__entry__id {
-  width: 20%;
+.dashboard__users__section__two__entry h1{
   font-size: var(--font-size-secondary);
   font-weight: 500;
+}
+.dashboard__users__section__two__entry__id {
+  width: 15%;
+  
 }
 .dashboard__users__section__two__entry__name {
   width: 20%;
-  font-size: var(--font-size-secondary);
-  font-weight: 500;
 }
 .dashboard__users__section__two__entry__email {
-  width: 20%;
-  font-size: var(--font-size-secondary);
-  font-weight: 500;
+  width: 25%;
 }
 .dashboard__users__section__two__entry__role {
   width: 10%;
-  font-size: var(--font-size-secondary);
-  font-weight: 500;
 }
 .dashboard__users__section__two__entry__status {
   width: 10%;
-  font-size: var(--font-size-secondary);
-  font-weight: 500;
 }
 .dashboard__users__section__two__entry__status > span {
   display: flex;

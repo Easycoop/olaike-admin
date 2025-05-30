@@ -23,6 +23,7 @@ function AdminSocieties() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [groupMembers, setGroupMembers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
 
@@ -108,11 +109,11 @@ function AdminSocieties() {
     getGroupMembers(groupId);
     setModalIsOpen(true);
   }
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    
+
+  const handleSearch = (query) => {
+    setSearchQuery(query.toLowerCase());
+  };
   
-  }
 
   useEffect(() => {
     handleGetSocieties();
@@ -124,12 +125,13 @@ function AdminSocieties() {
         <section className="admin__transaction__section__one">
           <span className="admin__transaction__section__header">
             <h1>Registered societies</h1>
-            <select name="Timeline" id="Timeline">
-              <option value={null}>This month</option>
-              <option value="1">Last month</option>
-              <option value="2">Last 6 months</option>
-              <option value="3">Last 1 year</option>
-            </select>
+            <input
+              type="text"
+              placeholder="Search Societies..."
+              onChange={(e) => handleSearch(e.target.value)}
+              className="search-input mb-3 form-control"
+              style={{ width: "300px" }}
+            />
           </span>
         </section>
         {loading ? (
@@ -162,7 +164,22 @@ function AdminSocieties() {
                 Action
               </h1>
             </div>
-            {result.map((item, i) => {
+            {result.filter((item) => {
+                const date = item.createdAt?.toLowerCase() || "";
+                const invoice = item.id?.toString().toLowerCase() || "";
+                const name = item.name?.toLowerCase() || "";
+                const desc = item.description?.toLowerCase() || "";
+                const status = item.isActive?.toString().toLowerCase() || "";
+
+                return (
+                  date.includes(searchQuery) ||
+                  invoice.includes(searchQuery) ||
+                  name.includes(searchQuery) ||
+                  desc.includes(searchQuery) ||
+                  status?.toString().includes(searchQuery)
+                );
+              })
+            .map((item, i) => {
               return (
                 <div
                   className="admin__transaction__section__two__entry"
@@ -185,14 +202,14 @@ function AdminSocieties() {
                     <span>
                       <PiCircleFill
                         className={
-                          item.isActive == "true"
+                          item.status == "true"
                             ? "ad__student__app__section__two__entry__status__icon successsful"
-                            : item.isActive == "false"
+                            : item.status == "false"
                             ? "ad__student__app__section__two__entry__status__icon unsuccesssful"
                             : "ad__student__app__section__two__entry__status__icon"
                         }
                       />
-                      {item.isActive}
+                      {item.status}
                     </span>
                   </h1>
                   <h1
@@ -202,8 +219,10 @@ function AdminSocieties() {
                     Edit
                     <BsPen />
                   </h1>
-                  {item?.AdminUsers.length == 0 && 
+                  {item?.AdminUsers.length == 0 ?
                     <button className="btn btn-primary" onClick={()=>openModal(item.id)}> Add an admin</button>
+                    :
+                    <button className="btn btn-primary" onClick={()=>openModal(item.id)}> Change Admin</button>
                   }
                   
                 </div>
@@ -214,7 +233,7 @@ function AdminSocieties() {
 
         <Modal
           isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
+          onAfterOpen={()=>{}}
           onRequestClose={()=>setModalIsOpen(false)}
           style={{
             content: {

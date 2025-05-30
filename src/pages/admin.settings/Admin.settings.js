@@ -6,11 +6,14 @@ import PhoneInput from "react-phone-input-2";
 import { MdCloudUpload, MdDelete } from "react-icons/md";
 import { AiFillFileImage } from "react-icons/ai";
 import { useContext, useState } from "react";
+import { useSelector } from "react-redux";
 import StateContext from "../../context/StateProvider";
 import { SketchPicker } from "react-color";
 import { useNavigate } from "react-router-dom";
 
 function AdminSettings() {
+  
+  const { user } = useSelector((state) => state.auth);
   const { chartTheme, setChartTheme, setTheme } = useContext(StateContext);
   const navigate = useNavigate();
   const [select, setSelect] = useState({

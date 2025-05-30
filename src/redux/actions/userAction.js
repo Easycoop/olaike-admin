@@ -11,9 +11,10 @@ import {
 
 export const doGetUsers = createAsyncThunk(
   "users/doGetUsers",
-  async (_, { rejectWithValue }) => {
+  async (page, { rejectWithValue }) => {
+    
     try {
-      const data = await getUsers();
+      const data = await getUsers(page);
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Action failed");

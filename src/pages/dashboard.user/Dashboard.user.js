@@ -7,45 +7,69 @@ import { useEffect, useState } from "react";
 import { useGetUsers } from "../../redux/actions/userAction";
 import Loading from "../../components/splash/loading/Loading";
 import NoResult from "../../components/splash/no-result/NoResult";
+import {ngDateFormat} from '../../utils/time';
 
 function DashboardUser() {
-  const getUsers = useGetUsers();
+  
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [userResult, setUserResult] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+
   const navigate = useNavigate();
 
-  const [userResult, setUserResult] = useState([]);
+  const getUsers = useGetUsers();
 
-  const handleGetUsers = async () => {
+  const handleSearch = (query) => {
+    setSearchQuery(query.toLowerCase());
+  };
+
+  const handleGetUsers = async (page) => {
     setLoading(true);
     try {
-      const response = await getUsers();
+      if (page > totalPages) return;
+      // const size = totalItems = 0 ? 20 : ((totalItems - (size * page)) < 20 ? (totalItems - (size * page)) : 20);
+      // console.log("size", size);
+      
+      const response = await getUsers(page);  
+      
       if (response?.payload.success === true) {
         setErrorMessage("");
         setUserResult(response.payload.data.result);
-        console.log(response.payload.data.result);
+        setCurrentPage(response.payload.data.currentPage);
+        setTotalPages(response.payload.data.totalPages);
+        setTotalItems(response.payload.data.totalItems);
         return;
       } else {
         setErrorMessage(response.message);
       }
     } catch (error) {
-      setErrorMessage(error.response.message);
+      setErrorMessage(error.response?.message);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    handleGetUsers();
+    handleGetUsers(1);
   }, []);
+
 
   return (
     <>
       <div className="dashboard__users">
         <section className="dashboard__users__section__one">
           <div className="dashboard__users__search">
-            <input placeholder="Enter user name" />
+            <input
+               type="text"
+               placeholder="Search users..."
+               onChange={(e) => handleSearch(e.target.value)}
+               className="search-input"
+            />
             <BiSearch className="admin__message__section__one__search__icon" />
           </div>
           <h3>Number of users: {userResult.length}</h3>
@@ -71,14 +95,14 @@ function DashboardUser() {
           />
         ) : (
           <section className="dashboard__users__section__two">
-            <div className="dashboard__users__section__two__header">
-              <h1 className="dashboard__users__section__two__header__id">ID</h1>
-              <h1 className="dashboard__users__section__two__header__name">
+          <div className="dashboard__users__section__two__header">
+          <h1 className="dashboard__users__section__two__header__name">
                 Name
               </h1>
               <h1 className="dashboard__users__section__two__header__email">
                 Email
               </h1>
+              <h1 className="dashboard__users__section__two__header__id">Society</h1>
               <h1 className="dashboard__users__section__two__header__role">
                 Role
               </h1>
@@ -91,47 +115,62 @@ function DashboardUser() {
               <h1 className="dashboard__users__section__two__header__action">
                 Action
               </h1>
-            </div>
-            {userResult.map((item, i) => {
+          </div>
+    
+          {userResult
+            .filter((item) => {
+              const fullName = `${item.firstName} ${item.lastName}`.toLowerCase();
+              const email = item.email?.toLowerCase() || "";
+              const groupName = item.Group?.name?.toLowerCase() || "";
+              const role = item.role?.toLowerCase() || "";
+              const status = item.isVerified ? "verified" : "not verified";
+    
               return (
-                <div className="dashboard__users__section__two__entry">
-                  <h1
-                    className="dashboard__users__section__two__entry__id"
-                    onClick={() => {
-                      navigate(`/main/user/${item.id}`);
-                    }}
-                  >
-                    {item.id}
-                  </h1>
-                  <h1
+                fullName.includes(searchQuery) ||
+                email.includes(searchQuery) ||
+                groupName.includes(searchQuery) ||
+                role.includes(searchQuery) ||
+                status.includes(searchQuery)
+              );
+            })
+            .map((item) => (
+              <div className="dashboard__users__section__two__entry" key={item.id}>
+                
+                <h1
                     className="dashboard__users__section__two__entry__name"
                     onClick={() => {
                       navigate(`/main/user/${item.id}`);
                     }}
                   >
                     {`${item.firstName} ${item.lastName}`}
-                  </h1>
-                  <h1
-                    className="dashboard__users__section__two__entry__email"
-                    onClick={() => {
-                      navigate(`/main/user/${item.id}`);
-                    }}
-                  >
-                    {item.email}
-                  </h1>
-                  <h1
-                    className="dashboard__users__section__two__entry__role"
-                    onClick={() => {
-                      navigate(`/main/user/${item.id}`);
-                    }}
-                  >
-                    {item.role}
-                  </h1>
-                  <h1
+                </h1>
+                <h1
+                  className="dashboard__users__section__two__entry__email"
+                  onClick={() => {
+                    navigate(`/main/user/${item.id}`);
+                  }}
+                >
+                  {item.email}
+                </h1>
+                <h1
+                  className="dashboard__users__section__two__entry__id"
+                  
+                >
+                  {item?.Group?.name}
+                </h1>
+                <h1
+                  className="dashboard__users__section__two__entry__role"
+                  onClick={() => {
+                    navigate(`/main/user/${item.id}`);
+                  }}
+                >
+                  {item.Roles && item.Roles[0].name}
+                </h1>
+                <h1
                     className="dashboard__users__section__two__entry__status"
-                    onClick={() => {
-                      navigate(`/main/user/${item.id}`);
-                    }}
+                    onClick={() => 
+                      navigate(`/main/user/${item.id}`)
+                    }
                   >
                     <span>
                       <PiCircleFill
@@ -146,11 +185,9 @@ function DashboardUser() {
                   </h1>
                   <h1
                     className="dashboard__users__section__two__entry__created"
-                    onClick={() => {
-                      navigate(`/main/user/${item.id}`);
-                    }}
+                   
                   >
-                    {item.createdAt}
+                    {ngDateFormat(item.createdAt)}
                   </h1>
                   <h1 className="dashboard__users__section__two__entry__action">
                     <span>
@@ -166,10 +203,31 @@ function DashboardUser() {
                       />
                     </span>
                   </h1>
-                </div>
-              );
-            })}
-          </section>
+              </div>
+            ))}
+
+
+            <div className="pagination-controls">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => handleGetUsers(currentPage - 1)}
+              >
+                Previous
+              </button>
+
+              <span>Page {currentPage} of {totalPages}</span>
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => {
+                  if (currentPage < totalPages) handleGetUsers(currentPage + 1);
+                }}
+              >
+                Next
+              </button>
+            </div>
+        </section>
+          
         )}
       </div>
     </>

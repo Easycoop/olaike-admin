@@ -29,6 +29,8 @@ import AdminUpdateSociety from "./pages/Admin.update.society/Admin.update.societ
 import SingleWithdrawalRequest from "./pages/admin.single.withdrawal.request/Admin.single.withdrawal.request";
 import PrivateRoute from "./route/privateRoute";
 import PublicRoute from "./route/publicRoute";
+import Thrifts from "./pages/admin.thrifts/Admin.Thrifts";
+import Kyc from "./pages/admin.kyc/Admin.Kyc";
 
 function App() {
   const { theme } = useContext(StateContext);
@@ -45,6 +47,7 @@ function App() {
                 <Route index element={<AdminDashboard />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="users" element={<DashboardUser />} />
+                <Route path="kyc" element={<Kyc />} />
                 <Route path="transaction" element={<AdminTransaction />} />
                 <Route
                   path="withdrawal-requests"
@@ -83,6 +86,7 @@ function App() {
                   path="registration-application/:applicationId"
                   element={<SingleRegistrationApplications />}
                 />
+                <Route path="thrifts/:programId" element={<Thrifts />} />
               </Route>
             </Route>
 

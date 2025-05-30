@@ -106,6 +106,18 @@ function SingleLoanApplications() {
               <h3>{result.dob}</h3>
             </span>
             <span>
+              <h1>Gender</h1>
+              <h3>{result.gender}</h3>
+            </span>
+            <span>
+              <h1>Bank Verification Number</h1>
+              <h3>{result.bvn}</h3>
+            </span>
+             <span>
+              <h1>Nationa Identification Number</h1>
+              <h3>{result.nin}</h3>
+            </span>
+            <span>
               <h1>Address</h1>
               <h3>{result.address}</h3>
             </span>
@@ -141,10 +153,7 @@ function SingleLoanApplications() {
               <h1>Next of Kin Relationship</h1>
               <h3>{result.nokRelationship}</h3>
             </span>
-            <span>
-              <h1>Bank Verification Number</h1>
-              <h3>{result.bvn}</h3>
-            </span>
+            
             <span>
               <h1>Guarantor Name</h1>
               <h3>{`${result.guarantorFirstName} ${result.guarantorLastName}`}</h3>
