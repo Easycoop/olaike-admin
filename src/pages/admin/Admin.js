@@ -13,7 +13,7 @@ import {
   FaIdBadge
 } from "react-icons/fa";
 import { RiDashboardFill, RiMenuFoldFill } from "react-icons/ri";
-import logo from "../../assets/icons/logo-secondary-color1.png";
+import logo from "../../assets/icons/logo_text_black.svg";
 import DashboardFooter from "../../components/layout/footer/Dashboard.footer";
 import DashboardHeader from "../../components/layout/header/Dashboard.header";
 import { useSelector } from "react-redux";
