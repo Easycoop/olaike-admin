@@ -22,13 +22,14 @@ import api from "../api/axios";
   }
 };*/
 
-export const getTransactions = async ({ startDate, endDate, page = 1, size = 10, status, society } = {}) => {
+export const getTransactions = async ({ startDate, endDate, page = 1, size = 10, status, society, description } = {}) => {
   try {
     const queryParams = new URLSearchParams();
     if (startDate) queryParams.append("startDate", startDate);
     if (endDate) queryParams.append("endDate", endDate);
     if (status) queryParams.append("status", status);
     if (society) queryParams.append("society", society);
+    if (description) queryParams.append('description', description)
     queryParams.append("page", page);
     queryParams.append("size", size);
 

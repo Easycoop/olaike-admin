@@ -63,9 +63,9 @@ export const updateUserApplication = async (payload) => {
   }
 };
 
-export const getLoanApplications = async () => {
+export const getLoanApplications = async (status) => {
   try {
-    const response = await api.get("/loan-application/");
+    const response = await api.get("/loan-application/?status=" + status);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -84,9 +84,10 @@ export const getLoanApplications = async () => {
   }
 };
 
-export const getSingleLoanApplication = async (id) => {
+export const getSingleLoanApplication = async (id, get_repayment=false) => {
   try {
-    const response = await api.get(`/loan-application/${id}`);
+    const endpoint = get_repayment  ? `/loan-application/${id}?get_repayment=true` : `/loan-application/${id}`;
+    const response = await api.get(endpoint);
     return response.data;
   } catch (error) {
     if (error.response) {

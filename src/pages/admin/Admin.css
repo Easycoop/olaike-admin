@@ -213,3 +213,36 @@
     width: 20%;
   }
 }
+
+
+
+
+.sidebar__menu__item {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+/* .sidebar__menu__item svg{
+  font-size: 12px;
+} */
+.sidebar__menu__link {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #444;
+}
+
+.sidebar__menu__link .icon {
+  margin-right: 8px;
+}
+
+.sidebar__menu__link.active {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+.sidebar__submenu {
+  /* margin-left: 15px; */
+  border-left: 1px solid #ddd;
+  /* padding-left: 10px; */
+}

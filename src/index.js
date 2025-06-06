@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StateProvider } from "./context/StateProvider";
+import { ConfigProvider } from "./context/ConfigProvider";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 
@@ -12,7 +13,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <StateProvider>
-        <App />
+        <ConfigProvider>
+         <App />
+         </ConfigProvider>
       </StateProvider>
     </Provider>
   </React.StrictMode>

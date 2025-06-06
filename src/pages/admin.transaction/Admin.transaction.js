@@ -31,6 +31,7 @@ function AdminTransaction() {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [status, setStatus] = useState("success");
+  const [description, setDescription] = useState("all");
   const [societies, setSocieties] = useState([]);
   const [society, setSociety] = useState('all');
 
@@ -69,6 +70,8 @@ function AdminTransaction() {
     };
   }
 
+  const descriptionList = ["loan repayment", "loan_application", "extra savings", "	entrance fee", "fund wallet"]
+
   const { totalCredit, totalDebit, overallSum } =
     calculateTransactionSums(transactions);
 
@@ -91,11 +94,9 @@ function AdminTransaction() {
   };*/
 
   const handleGetTransactions = async (page = 1, size = 10, status="success" ) => {
-    console.log(page)
     setLoading(true);
     try {
-      const response = await getTransactions({ startDate, endDate, page, size, status, society });
-      console.log(response);
+      const response = await getTransactions({ startDate, endDate, page, size, status, society, description });
       
       if (response?.payload?.status === "success") {
         setErrorMessage("");
@@ -114,7 +115,7 @@ function AdminTransaction() {
     }
   };
   const handleExport = ()=>{
-    exportToExcel(filterNestedFields(transactions, ["createdAt", "amount", "currency", "description", "metaData.from.senderName", "status", "type"]), "olaike-transactions.xlsx")
+    exportToExcel(filterNestedFields(transactions, ["createdAt", "amount", "currency", "description", "metaData.from.senderName", "status", "type"]), `${process.env.REACT_APP_APP_NAME}-transactions.xlsx`)
   }
 
   const handleGetSocieties = async () => {
@@ -175,6 +176,17 @@ function AdminTransaction() {
                   <option value={"success"}>Success</option>
                   <option value={"failed"}>Failed</option>
                   <option value={"pending"}>Pending</option>
+                </select>  
+              </div>
+              <div className="col-4">
+                <label>Description</label>
+                <select className="form-control" defaultValue={"all"} onChange={(e) => setDescription(e.target.value)}>
+                  <option value={"all"}>All</option>
+                  {descriptionList.map((desc, index)=>(
+                    <option key={index} value={desc}>{desc.replace('_', ' ')}</option>
+                  ))}
+                  
+                  
                 </select>  
               </div>
               <div className="col-4">
@@ -263,7 +275,7 @@ function AdminTransaction() {
                     minimumFractionDigits: 2,
                   })}`}</h1>
                   <h1 className="admin__transaction__section__two__entry__property">
-                    {transactions[i].description}
+                    {transactions[i].description.replaceAll('_', ' ')}
                   </h1>
                   <h1 className="admin__transaction__section__two__entry__property">
                     {transactions[i].Group?.name}

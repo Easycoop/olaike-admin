@@ -31,6 +31,7 @@ import PrivateRoute from "./route/privateRoute";
 import PublicRoute from "./route/publicRoute";
 import Thrifts from "./pages/admin.thrifts/Admin.Thrifts";
 import Kyc from "./pages/admin.kyc/Admin.Kyc";
+import LoanDetail from "./pages/admin.loan.applications/admin.loan.detail";
 
 function App() {
   const { theme } = useContext(StateContext);
@@ -71,7 +72,7 @@ function App() {
                 />
                 <Route path="send-money" element={<AdminSendMoney />} />
                 <Route
-                  path="loan-applications"
+                  path="loan-applications/:status"
                   element={<AdminLoanApplication />}
                 />
                 <Route
@@ -85,6 +86,10 @@ function App() {
                 <Route
                   path="registration-application/:applicationId"
                   element={<SingleRegistrationApplications />}
+                />
+                <Route
+                  path="loan/applications/:applicationId/payment-schedules"
+                  element={<LoanDetail />}
                 />
                 <Route path="thrifts/:programId" element={<Thrifts />} />
               </Route>

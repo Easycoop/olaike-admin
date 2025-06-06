@@ -48,9 +48,9 @@ export const doUpdateUserApplication = createAsyncThunk(
 
 export const doGetLoanApplications = createAsyncThunk(
   "applications/doGetLoanApplications",
-  async (_, { rejectWithValue }) => {
+  async (status, { rejectWithValue }) => {
     try {
-      const data = await getLoanApplications();
+      const data = await getLoanApplications(status);
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Action failed");
@@ -60,9 +60,11 @@ export const doGetLoanApplications = createAsyncThunk(
 
 export const doGetSingleLoanApplication = createAsyncThunk(
   "applications/doGetSingleLoanApplication",
-  async (id, { rejectWithValue }) => {
+  async (payload, { rejectWithValue }) => {
     try {
-      const data = await getSingleLoanApplication(id);
+      console.log("single loan payload", payload);
+      
+      const data = await getSingleLoanApplication(payload.applicationId, payload.get_repayment);
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Action failed");

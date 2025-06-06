@@ -2,21 +2,46 @@ import { FaFile, FaFileExcel, FaFileImport } from "react-icons/fa";
 import "./Admin.loan.applications.css";
 import { PiCircleFill } from "react-icons/pi";
 import { FaFileCircleCheck } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetLoanApplications } from "../../redux/actions/applicationAction";
 import { useEffect, useState } from "react";
+import { ngDateFormat, formDateFormat } from "../../utils/time";
 
 function AdminLoanApplication() {
   const getLoanApplications = useGetLoanApplications();
+  const {status} = useParams();
+  
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [result, setResult] = useState([]);
   const navigate = useNavigate();
 
+  const loanStatusMap = {
+    "pending": {
+      text:"pending",
+      color: "text-yellow-600",
+    },
+
+    "approved": {
+      text:"active",
+      color: "text-green-600",
+    },
+
+    "declined": {
+      text:"rejected",
+      color: "text-red-600",
+    },
+
+    "completed":{
+      text:"inactive",
+      color: "text-blue-600"
+    }
+  }
+
   const handleGetLoanApplications = async () => {
     setLoading(true);
     try {
-      const response = await getLoanApplications();
+      const response = await getLoanApplications(loanStatusMap[status]["text"]);
       if (response?.payload.success === true) {
         setErrorMessage("");
         setResult(response.payload.data.result);
@@ -33,7 +58,7 @@ function AdminLoanApplication() {
 
   useEffect(() => {
     handleGetLoanApplications();
-  }, []);
+  }, [status]);
 
   return (
     <>
@@ -106,10 +131,10 @@ function AdminLoanApplication() {
         <section className="ad__student__app__section__two">
           <div className="ad__student__app__section__two__header">
             <h1 className="ad__student__app__section__two__header__date">
-              Application date
+               Date Applied
             </h1>
             <h1 className="ad__student__app__section__two__header__id">
-              Application ID
+              Loan ID
             </h1>
             <h1 className="ad__student__app__section__two__header__university">
               Name
@@ -122,7 +147,7 @@ function AdminLoanApplication() {
             </h1>
 
             <h1 className="ad__student__app__section__two__header__userid">
-              Applicant Phone number
+               Phone 
             </h1>
             <h1 className="ad__student__app__section__two__header__status">
               Status
@@ -132,13 +157,14 @@ function AdminLoanApplication() {
           {result.map((item, i) => {
             return (
               <div
+                key={i}
                 className="ad__student__app__section__two__entry"
                 onClick={() => {
                   navigate(`/main/loan-application/${item.id}`);
                 }}
               >
                 <h1 className="ad__student__app__section__two__entry__date">
-                  {item.createdAt}
+                  {ngDateFormat(item.createdAt)}
                 </h1>
                 <h1 className="ad__student__app__section__two__entry__id">
                   {item.id}
@@ -155,16 +181,10 @@ function AdminLoanApplication() {
                 <h1 className="ad__student__app__section__two__entry__userid">
                   {item.phone}
                 </h1>
-                <h1 className="ad__student__app__section__two__entry__status">
+                <h1 className={`ad__student__app__section__two__entry__status flex justify-center text-center ${loanStatusMap[status]['color']}`}>
                   <span>
                     <PiCircleFill
-                      className={
-                        item.status == "active"
-                          ? "ad__student__app__section__two__entry__status__icon successful"
-                          : item.status == "inactive"
-                          ? "ad__student__app__section__two__entry__status__icon unsuccessful"
-                          : "ad__student__app__section__two__entry__status__icon"
-                      }
+                      className="{loanStatusMap[status]['color']}"
                     />{" "}
                     {item.status}
                   </span>

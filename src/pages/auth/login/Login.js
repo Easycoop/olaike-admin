@@ -1,21 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./login.css";
 import { ClipLoader } from "react-spinners";
 import login_image from "../../../assets/images/auth/login-image-1.png";
-import logo from "../../../assets/icons/logo_text_black.svg";
+// import logo from "../../../assets/icons/logo_text_black.svg";
 import Input from "../../../components/ui/form-elements/input";
 import Button from "../../../components/ui/button/Button";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../../redux/actions/authActions";
 import toastManager from "../../../components/ui/toast/ToasterManager";
+import { ConfigContext} from "../../../context/ConfigProvider";
 
-function Login() {
+const Login = () => {
   const login = useLogin();
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const { config, fetchConfig } = useContext(ConfigContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -60,12 +64,15 @@ function Login() {
     }
   };
 
+  useEffect(()=>{
+    fetchConfig()
+  }, []);
   return (
     <div className="login">
       <section className="login__main">
         <div className="login__main__start">
           <div className="login__main__start__wrap">
-            <img src={logo} alt="logo" />
+            <img src={config?.logos?.main_icon} alt="logo" />
             <h5>Sign in as admin</h5>
             {/* <h5>to accesss dashboard</h5> */}
             <form onSubmit={handleSubmit}>
