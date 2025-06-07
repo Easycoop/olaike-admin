@@ -123,7 +123,7 @@ function DashboardUser() {
               const email = item.email?.toLowerCase() || "";
               const groupName = item.Group?.name?.toLowerCase() || "";
               const role = item.role?.toLowerCase() || "";
-              const status = item.isVerified ? "verified" : "not verified";
+              const status = item.kycStatus === 'verified' ? "verified" : "not verified";
     
               return (
                 fullName.includes(searchQuery) ||

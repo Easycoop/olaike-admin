@@ -112,7 +112,6 @@ export default function LoanDetail({result, setPreviewPaymentSchedule}) {
                     {sumRepaymentTransactionsAmount(item.transactions) >= (parseFloat(item.weeklyAmount) + parseFloat(item.weeklyInterest)) 
                     ? ngDateFormat(item.transactions[item.transactions?.length -1]?.createdAt)  : "—"}
                     </td>
-                  {/* <td className="px-4 py-2">{item.paidOn || "—"}</td> */}
                   {/* <td className="px-4 py-2 space-x-2">
                     <button className="bg-[#003399] text-white px-3 py-1 rounded hover:opacity-90">
                       Close

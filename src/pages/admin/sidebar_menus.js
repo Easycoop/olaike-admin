@@ -26,9 +26,22 @@ export const sidebarMenu = (isSuperAdmin, user) => [
   },
   {
     id: 2,
-    label: "Users",
-    path: "/main/users",
+    label: "User Mgt.",
     icon: <FaUser />,
+    children: [
+      {
+        id: 21,
+        label: "Users",
+        path: "/main/users",
+        icon: <FaUser />,
+      },
+      {
+        id: 22,
+        label: "Create User",
+        path: "/main/create-user",
+        icon: <FaUserPlus />,
+      },
+    ],
   },
   {
     id: 3,
@@ -44,11 +57,28 @@ export const sidebarMenu = (isSuperAdmin, user) => [
   },
   {
     id: 5,
-    label: "Societies",
-    path: isSuperAdmin
-      ? "/main/societies"
-      : `/main/edit-society/${user?.Group?.id}`,
+    label: "Society Mgt.",
     icon: <MdGroups />,
+    children: [
+      {
+        id: 51,
+        label: "Societies",
+        path: isSuperAdmin
+          ? "/main/societies"
+          : `/main/edit-society/${user?.Group?.id}`,
+        icon: <MdGroups />,
+      },
+      ...(isSuperAdmin
+        ? [
+            {
+              id: 52,
+              label: "Create Society",
+              path: "/main/create-society",
+              icon: <BsNodePlusFill />,
+            },
+          ]
+        : []),
+    ],
   },
   {
     id: 6,
@@ -62,12 +92,6 @@ export const sidebarMenu = (isSuperAdmin, user) => [
     path: "/main/send-money",
     icon: <IoMdSend />,
   },
-  {
-    id: 8,
-    label: "Create New User",
-    path: "/main/create-user",
-    icon: <FaUserPlus />,
-  },
   ...(isSuperAdmin
     ? [
         {
@@ -75,12 +99,6 @@ export const sidebarMenu = (isSuperAdmin, user) => [
           label: "Create Role",
           path: "/main/create-role",
           icon: <HiMiniTableCells />,
-        },
-        {
-          id: 10,
-          label: "Create Society",
-          path: "/main/create-society",
-          icon: <BsNodePlusFill />,
         },
       ]
     : []),
@@ -101,11 +119,31 @@ export const sidebarMenu = (isSuperAdmin, user) => [
     label: "Loans",
     icon: <LiaHourglassEndSolid />,
     children: [
-          { id: 1311, label: "Declined", icon: <IoMdClose />, path: "/main/loan-applications/declined" },
-          { id: 1312, label: "Pending", icon: <TbArrowBarLeft />, path: "/main/loan-applications/pending" },
-          { id: 1313, label: "Approved", icon: <RiMenuFoldFill />, path: "/main/loan-applications/approved" },
-          { id: 1314, label: "Completed", icon: <FaCheck />, path: "/main/loan-applications/completed" },
-        ],
+      {
+        id: 1311,
+        label: "Declined",
+        icon: <IoMdClose />,
+        path: "/main/loan-applications/declined",
+      },
+      {
+        id: 1312,
+        label: "Pending",
+        icon: <TbArrowBarLeft />,
+        path: "/main/loan-applications/pending",
+      },
+      {
+        id: 1313,
+        label: "Approved",
+        icon: <RiMenuFoldFill />,
+        path: "/main/loan-applications/approved",
+      },
+      {
+        id: 1314,
+        label: "Completed",
+        icon: <FaCheck />,
+        path: "/main/loan-applications/completed",
+      },
+    ],
   },
   {
     id: 14,
@@ -113,5 +151,6 @@ export const sidebarMenu = (isSuperAdmin, user) => [
     path: "/main/setting",
     icon: <IoMdSettings />,
   },
-  
 ];
+
+

@@ -10,12 +10,48 @@ import { useSelector } from "react-redux";
 import StateContext from "../../context/StateProvider";
 import { SketchPicker } from "react-color";
 import { useNavigate } from "react-router-dom";
+import {useClearDB} from '../../redux/actions/miscAction';
+import toastManager from "../../components/ui/toast/ToasterManager";
 
 function AdminSettings() {
   
   const { user } = useSelector((state) => state.auth);
   const { chartTheme, setChartTheme, setTheme } = useContext(StateContext);
   const navigate = useNavigate();
+  const clearDB = useClearDB();
+
+  const handleClearDB = async () => {
+    try {
+      const response = await clearDB();
+
+        if (
+          response?.payload.status === 200 ||
+          response?.payload.status === "success"
+        ) {
+          toastManager.addToast({
+            message: "Database cleared",
+            type: "success",
+          });
+          
+          return;
+        } else {
+          console.log(response);
+          
+          toastManager.addToast({
+            message: "Something went wrong",
+            type: "error",
+          });
+        }
+    } catch (error) {
+      console.log(error);
+      toastManager.addToast({
+          message: "Something went wrong",
+          type: "error",
+        });
+    }
+    
+  }
+
   const [select, setSelect] = useState({
     select1: true,
     select2: false,
@@ -50,41 +86,46 @@ function AdminSettings() {
     <>
       <div className="admin__settings">
         <section className="account__notifications__section__two">
-          <div className="account__notifications__select__div">
-            <button
-              className={
-                select.select1
-                  ? "account__notifications__select selected"
-                  : "account__notifications__select"
-              }
-              onClick={() =>
-                setSelect((prevState) => ({
-                  ...prevState,
-                  select1: true,
-                  select2: false,
-                  select3: false,
-                }))
-              }
-            >
-              Account
-            </button>
-            <button
-              className={
-                select.select2
-                  ? "account__notifications__select selected"
-                  : "account__notifications__select"
-              }
-              onClick={() =>
-                setSelect((prevState) => ({
-                  ...prevState,
-                  select1: false,
-                  select2: true,
-                  select3: false,
-                }))
-              }
-            >
-              Theme
-            </button>
+          <div className="account__notifications__select__div flex justify-between">
+            <div>
+              <button
+                className={
+                  select.select1
+                    ? "account__notifications__select selected"
+                    : "account__notifications__select"
+                }
+                onClick={() =>
+                  setSelect((prevState) => ({
+                    ...prevState,
+                    select1: true,
+                    select2: false,
+                    select3: false,
+                  }))
+                }
+              >
+                Account
+              </button>
+              <button
+                className={
+                  select.select2
+                    ? "account__notifications__select selected"
+                    : "account__notifications__select"
+                }
+                onClick={() =>
+                  setSelect((prevState) => ({
+                    ...prevState,
+                    select1: false,
+                    select2: true,
+                    select3: false,
+                  }))
+                }
+              >
+                Theme
+              </button>
+            </div>
+
+            <button onClick={handleClearDB}>Clear Database </button>
+
           </div>
         </section>
 
