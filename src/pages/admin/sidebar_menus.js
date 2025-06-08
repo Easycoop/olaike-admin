@@ -80,18 +80,18 @@ export const sidebarMenu = (isSuperAdmin, user) => [
         : []),
     ],
   },
-  {
-    id: 6,
-    label: "Deposit Money",
-    path: "/main/deposit-money",
-    icon: <FaCreditCard />,
-  },
-  {
-    id: 7,
-    label: "Send Money",
-    path: "/main/send-money",
-    icon: <IoMdSend />,
-  },
+  // {
+  //   id: 6,
+  //   label: "Deposit Money",
+  //   path: "/main/deposit-money",
+  //   icon: <FaCreditCard />,
+  // },
+  // {
+  //   id: 7,
+  //   label: "Send Money",
+  //   path: "/main/send-money",
+  //   icon: <IoMdSend />,
+  // },
   ...(isSuperAdmin
     ? [
         {

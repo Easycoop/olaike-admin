@@ -8,7 +8,8 @@ import {
   useUpdateSociety,
   useCreateContribution,
   useGetContributions,
-  useUpdateContribution
+  useUpdateContribution,
+  useDeleteContribution
 } from "../../redux/actions/societyAction";
 import toastManager from "../../components/ui/toast/ToasterManager";
 import { ClipLoader } from "react-spinners";
@@ -26,6 +27,7 @@ function AdminUpdateSociety() {
   const createContribution = useCreateContribution();
   const getContributions = useGetContributions();
   const updateContribution = useUpdateContribution();
+  const deleteContribution = useDeleteContribution();
 
   const { societyId } = useParams();
 
@@ -278,7 +280,6 @@ function AdminUpdateSociety() {
     }
   }
   
-
   const openEditModal = (e) => {
     const  targetProgram = allContributionProgram[e.target.getAttribute("data-id")];
     const  newProgramToEdit = {
@@ -312,6 +313,35 @@ function AdminUpdateSociety() {
       }   
     }catch (error) {
       console.log(error);
+    }
+  }
+
+  const handleDeleteContribution = async (id) => {
+    try {
+      const response = await deleteContribution({id});
+      console.log(response);
+      
+      if(response?.payload.status === "success"){
+        toastManager.addToast({
+          message: "Contribution Program deleted successfully",
+          type: "success",
+        });
+        // setProgramEditModalIsOpen(false)
+        fetchContributions();
+      }else{
+        console.log(response);
+        toastManager.addToast({
+          message: response.payload || "Something went wrong",
+          type: "error",
+        });
+      }   
+    }catch (error) {
+      console.log(error);
+      toastManager.addToast({
+          message: error.payload || "Something went wrong",
+          type: "error",
+      });
+      
     }
   }
   useEffect(() => {
@@ -548,7 +578,7 @@ function AdminUpdateSociety() {
                           <td>
                             <button className="btn btn-primary me-2" data-id={index} onClick={(e)=>openEditModal(e)}> Edit</button>
                             <Link to={`/main/thrifts/${contribution.id}`} className="btn btn-primary">View Thrifts</Link>
-                            <button className="btn btn-danger">Delete</button>
+                            <button className="btn btn-danger" onClick={()=>handleDeleteContribution(contribution.id)}>Delete</button>
                           </td>
                         </tr>
                       ))}
