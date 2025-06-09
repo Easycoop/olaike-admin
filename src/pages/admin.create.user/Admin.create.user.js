@@ -294,6 +294,7 @@ function AdminCreateUser() {
                 placeholder="e.g +2347011122233"
                 alt=""
                 value={phone}
+                name="phone"
                 onChange={(e) => setPhone(e.target.value)}
               />
             </div>

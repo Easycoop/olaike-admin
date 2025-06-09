@@ -9,6 +9,7 @@ const api = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    "admin-token": state.auth,
   },
   timeout: 10000, // Timeout of 10 seconds
   withCredentials: false, // Send cookies when making requests

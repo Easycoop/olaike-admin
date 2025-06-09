@@ -15,7 +15,8 @@ import toastManager from "../../components/ui/toast/ToasterManager";
 
 function AdminSettings() {
   
-  const { user } = useSelector((state) => state.auth);
+  const { user, roles } = useSelector((state) => state.auth);
+  const isSuperAdmin = roles?.includes("SuperAdmin");
   const { chartTheme, setChartTheme, setTheme } = useContext(StateContext);
   const navigate = useNavigate();
   const clearDB = useClearDB();
@@ -123,8 +124,11 @@ function AdminSettings() {
                 Theme
               </button>
             </div>
-
-            <button onClick={handleClearDB}>Clear Database </button>
+              
+            {
+              isSuperAdmin && <button onClick={handleClearDB}>Clear Database </button>
+            }
+            
 
           </div>
         </section>
