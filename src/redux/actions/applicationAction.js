@@ -8,6 +8,7 @@ import {
   getSingleLoanApplication,
   updateLoanApplication,
   updateUserApplication,
+  getLoanCounts,
 } from "../../services/applicationService";
 
 export const doGetApplications = createAsyncThunk(
@@ -84,6 +85,18 @@ export const doUpdateLoanApplication = createAsyncThunk(
   }
 );
 
+export const doGetLoanCounts = createAsyncThunk(
+  "applications/doGetLoanCounts",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const data = await getLoanCounts(payload);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
 export const useGetApplications = () => useDispatcher(doGetApplications);
 export const useGetSingleApplication = () =>
   useDispatcher(doGetSingleApplication);
@@ -95,3 +108,4 @@ export const useGetSingleLoanApplication = () =>
   useDispatcher(doGetSingleLoanApplication);
 export const useUpdateLoanApplication = () =>
   useDispatcher(doUpdateLoanApplication);
+export const useGetLoanCounts = () => useDispatcher(doGetLoanCounts);
