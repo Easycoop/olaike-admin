@@ -2,9 +2,12 @@ import { FaFile, FaFileExcel, FaFileImport } from "react-icons/fa";
 import { FaFileCircleCheck } from "react-icons/fa6";
 import { useGetLoanCounts } from "../../redux/actions/applicationAction";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const LoanStats = () => {
     const getLoanCounts = useGetLoanCounts();
+    const { roles, user } = useSelector((state) => state.auth);
+    const isSuperAdmin = roles?.includes("SuperAdmin");
 
     const [loanCounts, setLoanCounts] = useState({
         active:0,
@@ -16,7 +19,8 @@ const LoanStats = () => {
 
     const fetchLoanCounts = async () => {
         try {
-            const response = await getLoanCounts();
+            const loanCountParam = isSuperAdmin ? null : user.groupId
+            const response = await getLoanCounts(loanCountParam);
             if (response?.payload.success === true || response?.payload.status === "success") {
                 setLoanCounts(response.payload.data);
             }
