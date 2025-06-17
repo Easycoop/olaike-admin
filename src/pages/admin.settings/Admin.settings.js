@@ -1,25 +1,28 @@
 import "./Admin.settings.css";
-import { PiWarningOctagonFill } from "react-icons/pi";
 import { BsAsterisk } from "react-icons/bs";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import PhoneInput from "react-phone-input-2";
-import { MdCloudUpload, MdDelete } from "react-icons/md";
-import { AiFillFileImage } from "react-icons/ai";
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import StateContext from "../../context/StateProvider";
-import { SketchPicker } from "react-color";
 import { useNavigate } from "react-router-dom";
 import {useClearDB} from '../../redux/actions/miscAction';
 import toastManager from "../../components/ui/toast/ToasterManager";
+import { useGetUser, useUpdateUser } from "../../redux/actions/userAction";
+import { MdCloudUpload, MdDelete } from "react-icons/md";
+import { AiFillFileImage } from "react-icons/ai";
+import Theme from "./Theme";
+import { runValidation } from "../../utils/buchi";
+import ValidationError from "../../components/ui/form-elements/ValidaionError";
+
 
 function AdminSettings() {
   
   const { user, roles } = useSelector((state) => state.auth);
   const isSuperAdmin = roles?.includes("SuperAdmin");
-  const { chartTheme, setChartTheme, setTheme } = useContext(StateContext);
   const navigate = useNavigate();
   const clearDB = useClearDB();
+  const getUser = useGetUser();
+  const updateUser = useUpdateUser();
 
   const handleClearDB = async () => {
     try {
@@ -59,29 +62,116 @@ function AdminSettings() {
     select3: false,
   });
 
-  const [result, setResult] = useState({});
-  const [image, setImage] = useState(null);
-  const [fileName, setFileName] = useState("No file selected");
-  const [lastName, setLastName] = useState(null);
-  const [firstName, setFirstName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [phone, setPhone] = useState(null);
-  const [gender, setGender] = useState(null);
-  const [nationality, setNationality] = useState(null);
-  const [state, setState] = useState(null);
-  const [address, setAddress] = useState(null);
-  const [role, setRole] = useState(null);
-  const [verification, setVerification] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
+  const [validationErrors, setValidationErrors] = useState();
 
-  const handleChangeComplete1 = (color) => {
-    setChartTheme((prevState) => ({ ...prevState, primaryColor: color.hex }));
-  };
-  const handleChangeComplete2 = (color) => {
-    setChartTheme((prevState) => ({ ...prevState, secondaryColor: color.hex }));
+  const [userData, setUserData] = useState({
+    id:user.id,
+    firstName:user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    address: user.address,
+    country: user.country,
+    state: user.state,
+    gender: user.gender,
+    phone: user.phone,
+  });
+
+  const [nationality, setNationality] = useState()
+
+  const handleGetUser = async () => {
+    try {
+      const response = await getUser(user?.id);
+      if (response?.payload.success === true || response?.payload.status === "success") {
+        const compUserData = response.payload.data.user;
+        for (let prop in compUserData){
+          if(!prop in userData){
+            delete compUserData[prop]
+          }
+        }
+        setUserData(compUserData);
+        return;
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (error) {
+      setErrorMessage(error.response.message); 
+    }
+    
+  }
+
+  const handleUpdateUser = async () => {
+    try {
+      const response = await updateUser(userData);
+      if (response?.payload.success === true || response?.payload.status === "success") {
+        toastManager.addToast({
+          message: "Updated successfully",
+          type: "success",
+        });
+      }else{
+        toastManager.addToast({
+          message: response.payload.message || "Something went wrong",
+          type: "error",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      
+      toastManager.addToast({
+          message: "S",
+          type: "error",
+        });
+    }
+    
   };
 
-  const updateUser = () => {};
+  const updateUserDataState = (prop, value) => {
+    setUserData((prevState) => ({ ...prevState, [prop]: value }));
+  };
+
+
+   const validateUpdateForm = async () => {
+      
+      const validate = await runValidation([
+          {
+            input: { value: userData.address, field: "address", type: "text" },
+            rules: { required: true },
+          },
+          {
+              input: { value: userData.email, field: "email", type: "text" },
+              rules: { required: true, email:true },
+          },
+          {
+              input: { value: userData.phone, field: "phone", type: "text" },
+              rules: { required: true, min_length:13, max_length:13 },
+          },
+          {
+              input: { value: userData.firstName, field: "first_name", type: "text" },
+              rules: { required: true, },
+          },
+          {
+              input: { value: userData.lastName, field: "last_name", type: "text" },
+              rules: { required: true, },
+          },
+          {
+              input: { value: userData.gender, field: "gender", type: "text" },
+              rules: { required: true, },
+          },
+          
+      ]);
+  
+      if (validate?.status === false) {
+          
+          setValidationErrors(validate.errors);
+      } else {
+        // alert("kkkkkk")
+        handleUpdateUser();
+      }
+    }
+
+  useEffect(() => {
+    handleGetUser();
+  }, []);
 
   return (
     <>
@@ -136,7 +226,7 @@ function AdminSettings() {
         <section>
           {select.select1 ? (
             <div className="edit__user">
-              <h1>Accout details</h1>
+              <h1>Account details</h1>
               <section className="edit__user__section1">
                 <h3>Edit your account details</h3>
                 <article>
@@ -148,9 +238,10 @@ function AdminSettings() {
                     <input
                       type="text"
                       alt=""
-                      defaultValue={result.first_name}
-                      onChange={(e) => setFirstName(e.target.value)}
+                      defaultValue={userData.firstName}
+                      onChange={(e) => updateUserDataState("firstName", e.target.value)}
                     />
+                    <ValidationError validationErrors={validationErrors} field="first_name" />
                   </div>
                   <div className="edit__user__article__div">
                     <label>
@@ -160,9 +251,10 @@ function AdminSettings() {
                     <input
                       type="text"
                       alt=""
-                      defaultValue={result.last_name}
-                      onChange={(e) => setLastName(e.target.value)}
+                      defaultValue={userData.lastName}
+                      onChange={(e) => updateUserDataState("lastName", e.target.value)}
                     />
+                    <ValidationError validationErrors={validationErrors} field="last_name" />
                   </div>
                   <div className="edit__user__article__div">
                     <label>
@@ -172,9 +264,10 @@ function AdminSettings() {
                     <input
                       type="email"
                       alt=""
-                      defaultValue={result.email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      defaultValue={userData.email}
+                      onChange={(e) => updateUserDataState('email', e.target.value)}
                     />
+                    <ValidationError validationErrors={validationErrors} field="email" />
                   </div>
 
                   <div className="edit__user__article__div">
@@ -184,18 +277,20 @@ function AdminSettings() {
                     </label>
                     <CountryDropdown
                       whitelist={["NG", "SL"]}
-                      value={nationality}
-                      onChange={(val) => setNationality(val)}
+                      value={userData?.country}
+                      onChange={(val, e) => {updateUserDataState('country', e.target.value); setNationality(val)}}
                     />
+                    <ValidationError validationErrors={validationErrors} field="country" />
                   </div>
                   <div className="edit__user__article__div">
                     <label>State/Region</label>
                     <RegionDropdown
                       country={nationality}
-                      value={state}
+                      value={userData.state}
                       blankOptionLabel="State"
-                      onChange={(val) => setState(val)}
+                      onChange={(val, e) => updateUserDataState('state', e.target.value)}
                     />
+                    <ValidationError validationErrors={validationErrors} field="state" />
                   </div>
 
                   <div className="edit__user__article__div">
@@ -204,22 +299,26 @@ function AdminSettings() {
                       type="text"
                       placeholder="e.g Lekki, Rosario"
                       alt=""
-                      defaultValue={result.address}
-                      onChange={(e) => setAddress(e.target.value)}
+                      defaultValue={userData.address}
+                      onChange={(e) => updateUserDataState('address', e.target.value)}
+                      name="address"
                     />
+                    <ValidationError validationErrors={validationErrors} field="address" />
                   </div>
+
                   <div className="edit__user__article__div">
                     <label>
                       Gender{" "}
                       <BsAsterisk className="edit__user__article__div__icon"></BsAsterisk>
                     </label>
-                    <select name="gender" id="gender">
+                    <select  id="gender" defaultValue={userData.gender} onChange={(e) => {updateUserDataState('gender', e.target.value)}}>
                       <option value={null}>--</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                     </select>
+                    <ValidationError validationErrors={validationErrors} field="gender" />
                   </div>
-                  <div className="edit__user__article__div">
+                  {/* <div className="edit__user__article__div">
                     <label>
                       Password{" "}
                       <BsAsterisk className="edit__user__article__div__icon"></BsAsterisk>
@@ -230,16 +329,12 @@ function AdminSettings() {
                       alt=""
                       onChange={(e) => setPassword(e.target.value)}
                     />
-                  </div>
+                  </div> */}
                   <div className="edit__user__article__div">
-                    <label>
-                      Phone{" "}
-                      <BsAsterisk className="edit__user__article__div__icon"></BsAsterisk>
-                    </label>
+                    
                     <PhoneInput
-                      // value={result.phone}
                       country={"ng"}
-                      onChange={(e) => setPhone(e)}
+                      onChange={(val) => updateUserDataState('phone', val)}
                       inputStyle={{
                         width: "100%",
                         margin: "0",
@@ -247,10 +342,13 @@ function AdminSettings() {
                       containerStyle={{
                         marginBottom: "20px",
                       }}
+                      value={userData.phone}
                     />
+                    <ValidationError validationErrors={validationErrors} field="phone" />
                   </div>
+                  
 
-                  <div className="edit__user__article__div">
+                  {/* <div className="edit__user__article__div">
                     <label>
                       Profile image{" "}
                       <BsAsterisk className="edit__user__article__div__icon"></BsAsterisk>
@@ -301,12 +399,12 @@ function AdminSettings() {
                         />
                       </span>
                     </div>
-                  </div>
+                  </div> */}
                 </article>
               </section>
 
               <span>
-                <button onClick={updateUser}>Save</button>
+                <button onClick={validateUpdateForm}>Save</button>
                 <button
                   onClick={() => {
                     navigate("/admin/user");
@@ -321,72 +419,7 @@ function AdminSettings() {
           )}
 
           {select.select2 ? (
-            <div className="admin__settings__section__two__theme">
-              <h1>Theme settings</h1>
-              <div className="admin__settings__section__two__theme__alert">
-                <PiWarningOctagonFill className="admin__settings__section__two__theme__alert__icon" />{" "}
-                Theme color settings allows you to select different themes to
-                suite your aesthetics.
-              </div>
-              <div className="admin__settings__section__two__theme__alert__select">
-                <button
-                  className="admin__settings__section__two__theme__alert__button zero"
-                  onClick={() => setTheme("#00208a")}
-                >
-                  Royal blue
-                </button>
-                <button
-                  className="admin__settings__section__two__theme__alert__button one"
-                  onClick={() => setTheme("#8b0000")}
-                >
-                  Dark red
-                </button>
-                <button
-                  className="admin__settings__section__two__theme__alert__button two"
-                  onClick={() => setTheme("#b8860b")}
-                >
-                  Dark golden rod
-                </button>
-                <button
-                  className="admin__settings__section__two__theme__alert__button three"
-                  onClick={() => setTheme("#228b22")}
-                >
-                  Forest green
-                </button>
-                <button
-                  className="admin__settings__section__two__theme__alert__button four"
-                  onClick={() => setTheme("#000000")}
-                >
-                  black
-                </button>
-                <button
-                  className="admin__settings__section__two__theme__alert__button five"
-                  onClick={() => setTheme("#7a5af5")}
-                >
-                  purple
-                </button>
-              </div>
-
-              <div className="admin__settings__section__two__theme__alert__chart">
-                <h1>Chart color scheme</h1>
-                <article>
-                  <div>
-                    <SketchPicker
-                      color={chartTheme.primaryColor}
-                      onChangeComplete={handleChangeComplete1}
-                    />
-                    <h3>Primary chart color</h3>
-                  </div>
-                  <div>
-                    <SketchPicker
-                      color={chartTheme.secondaryColor}
-                      onChangeComplete={handleChangeComplete2}
-                    />
-                    <h3>Secondary chart color</h3>
-                  </div>
-                </article>
-              </div>
-            </div>
+           <Theme />
           ) : (
             <></>
           )}

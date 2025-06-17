@@ -79,7 +79,7 @@ function AdminDashboard() {
           </div>
           <div className="admin__dashboard__section__one__seg">
             <span>
-              Pending registration applications
+              Pending registrations 
               <MdOutlinePendingActions className="admin__dashboard__section__one__seg__icon two" />
             </span>
             <h1>
@@ -105,7 +105,7 @@ function AdminDashboard() {
               Gross transaction volume{" "}
               <MdOutlinePayment className="admin__dashboard__section__one__seg__icon three" />
             </span>
-            <h1>{data?.transactionVolume}</h1>
+            <h1>{data?.transactionVolume?.toFixed(2)}</h1>
           </div>
         </section>
          {/*<section className="admin__dashboard__section__two">

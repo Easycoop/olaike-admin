@@ -72,7 +72,7 @@ function DashboardUser() {
             />
             <BiSearch className="admin__message__section__one__search__icon" />
           </div>
-          <h3>Number of users: {userResult.length}</h3>
+          <h3>Number of users: {totalItems}</h3>
           <div className="dashboard__users__end">
             <div className="dashboard__users__end__filter">
               <div></div>

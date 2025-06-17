@@ -67,7 +67,7 @@
   color: red;
   font-size: 5px;
 }
-.edit__user__article__div > input {
+.edit__user__article__div input {
   font-size: var(--font-size-secondary);
   font-weight: 500;
   color: var(--tertiary-text-color);
