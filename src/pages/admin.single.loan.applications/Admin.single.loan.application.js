@@ -7,7 +7,7 @@ import {
 } from "../../redux/actions/applicationAction";
 import toastManager from "../../components/ui/toast/ToasterManager";
 import LoanDetail from "../admin.loan.applications/admin.loan.detail";
-import { ngDateTimeFormat } from "../../utils/time";
+import { ngDateFormat, ngDateTimeFormat } from "../../utils/time";
 
 function SingleLoanApplications() {
   const getSingleLoanApplication = useGetSingleLoanApplication();
@@ -141,7 +141,7 @@ function SingleLoanApplications() {
               </span>
               <span>
                 <h1>Date of Birth</h1>
-                <h3>{result.dob}</h3>
+                <h3>{ngDateFormat(result.dob)}</h3>
               </span>
               <span>
                 <h1>Gender</h1>
