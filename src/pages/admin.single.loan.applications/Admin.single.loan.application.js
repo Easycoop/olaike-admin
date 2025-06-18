@@ -7,6 +7,7 @@ import {
 } from "../../redux/actions/applicationAction";
 import toastManager from "../../components/ui/toast/ToasterManager";
 import LoanDetail from "../admin.loan.applications/admin.loan.detail";
+import { ngDateTimeFormat } from "../../utils/time";
 
 function SingleLoanApplications() {
   const getSingleLoanApplication = useGetSingleLoanApplication();
@@ -116,7 +117,7 @@ function SingleLoanApplications() {
             <article className="admin__single__notice__section__one__article2">
               <span>
                 <h1>Application Date</h1>
-                <h3>{result.createdAt}</h3>
+                <h3>{ngDateTimeFormat(result.createdAt)}</h3>
               </span>
               <span>
                 <h1>User Name</h1>
