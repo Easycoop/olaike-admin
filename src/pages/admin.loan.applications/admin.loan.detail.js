@@ -96,17 +96,18 @@ export default function LoanDetail({result, setPreviewPaymentSchedule}) {
                   <td className="px-4 py-2">{formatUnixToDateTime(item.dueDate)}</td> 
                   <td className="px-4 py-2">₦{item.weeklyAmount.toLocaleString()}</td>
                   <td className="px-4 py-2">₦{item.weeklyInterest.toLocaleString()}</td>
-                  <td className="px-4 py-2">₦{sumRepaymentTransactionsAmount(item.transactions)}</td>
+                  <td>₦{(parseFloat(item.amountPaid) + parseFloat(item.interestPaid)).toFixed(2)}</td>
                   <td className="px-4 py-2">
-                    
+                    {item.amountIsPaid && item.interestIsPaid ? "paid" : 
+                          (item.transactions.length > 0  ? 
+                          'Partly paid' :"unpaid")}
+                          { 
+                            item.dueDate < Date.now() / 1000 && (!item.amountIsPaid || !item.interestIsPaid) && 
+                            <>
+                            <br /><span className="status-badge overdue">  Overdue </span>
+                            </>
 
-                    {sumRepaymentTransactionsAmount(item.transactions) >= (parseFloat(item.weeklyAmount) + parseFloat(item.weeklyInterest)) ?
-                        <span className={`px-1 overdue ${statusStyles.paid}`}>  Paid </span>  
-                        : 
-                        (item.transactions.length > 0)  ? 'Partly paid' :"unpaid"} 
-                        {(item.dueDate < Date.now() / 1000) && sumRepaymentTransactionsAmount(item.transactions) < (parseFloat(item.weeklyAmount) + parseFloat(item.weeklyInterest)) && 
-                        <><br /><span className={`px-1 overdue ${statusStyles.overdue}`}>  Overdue </span> </>
-                    }
+                          }
                   </td>
                   <td className="px-4 py-2">
                     {sumRepaymentTransactionsAmount(item.transactions) >= (parseFloat(item.weeklyAmount) + parseFloat(item.weeklyInterest)) 
