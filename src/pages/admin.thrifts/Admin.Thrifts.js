@@ -5,13 +5,18 @@ import { BiSearch } from "react-icons/bi";
 import {ngDateTimeFormat, formatUnixToDate} from '../../utils/time';
 import {useParams, Link} from 'react-router-dom';
 import {useGetContributionThrifts} from '../../redux/actions/societyAction';
+import { useGetLoanApplications } from '../../redux/actions/applicationAction';
+
 
 const Thrifts = () => {
+  // redux variables
+  const getLoanApplications = useGetLoanApplications();
     // state variables
     const [program, setProgram] = useState({});
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
+    const [activeLoans, setActiveLoans] = useState([]);
 
     // redux hooks
     const getProgram = useGetContributionThrifts();
@@ -44,6 +49,30 @@ const Thrifts = () => {
 
     
 
+    const handleGetLoanApplications = async () => {
+      setLoading(true);
+      try {
+        const response = await getLoanApplications('active');
+        if (response?.payload.success === true) {
+          setErrorMessage("");
+          setActiveLoans(response.payload.data.result);
+          return;
+        } else {
+          setErrorMessage(response.message);
+        }
+      } catch (error) {
+        setErrorMessage(error.response.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+     const getLatenessCharge = (thriftDueDate, user_id) => {
+        const UserActiveLoan = activeLoans.find((loan) => loan.userId === user_id);
+        if(!UserActiveLoan) return 100
+        return thriftDueDate > UserActiveLoan?.approvalDate ? 500 : 100
+     }
+
     // Api calls
     const fetchProgram = async () =>{
         setLoading(true);
@@ -64,10 +93,12 @@ const Thrifts = () => {
         }
     };
       
-      useEffect(()=>{
-        
-        fetchProgram()
-      }, []);
+    useEffect(()=>{
+
+      fetchProgram();
+      handleGetLoanApplications();
+
+    }, []);
 
 
     return (
@@ -162,7 +193,10 @@ const Thrifts = () => {
                   thrift.fees.find((fee) => fee.type === "late_recurrent_payment").amount :
                   "N/A" 
                 :
-                thrift.dueDate < Math.floor(Date.now() / 1000) ? 500 : "N/A"}
+                thrift.dueDate < Math.floor(Date.now() / 1000) ? getLatenessCharge(thrift.dueDate, thrift.userId) :" N/A"
+                // thrift.dueDate < Math.floor(Date.now() / 1000) ? 500 : "N/A"
+                }
+                
             </div>
             <div className="admin-table-cell">
               {!(thrift.transaction && thrift.transaction.status === 'success') ?
