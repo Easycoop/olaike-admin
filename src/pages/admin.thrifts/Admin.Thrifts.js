@@ -195,7 +195,7 @@ const Thrifts = () => {
                 :
                 thrift.dueDate < Math.floor(Date.now() / 1000) ? getLatenessCharge(thrift.dueDate, thrift.userId) :" N/A"
                 // thrift.dueDate < Math.floor(Date.now() / 1000) ? 500 : "N/A"
-                }
+              }
                 
             </div>
             <div className="admin-table-cell">
