@@ -3,7 +3,7 @@ name: Deploy React App via SSH
 on:
   push:
     branches:
-      - demo  # Or your deployment branch
+      - olaike-admin  # Or your deployment branch
 
 jobs:
   deploy:
@@ -14,7 +14,7 @@ jobs:
       REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
       REACT_APP_BASE_URL_SOCKET: ${{ secrets.REACT_APP_BASE_URL_SOCKET }}
       REACT_APP_PAYSTACK_PUBLIC_KEY: "pk_test_abea14b8413cb3f06f2d652fced67a2d1a29ede7"
-      REACT_APP_APP_NAME: "Easycoop"
+      REACT_APP_APP_NAME: "Olaike"
       NODE_ENV: "production"
 
     steps:
@@ -40,7 +40,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           source: "build/*"
-          target: ${{ secrets.REACT_APP_WEB_ROOT_DIR }}
+          target: ${{ secrets.OLAIKE_ADMIN_WEB_ROOT_DIR }}
 
       - name: Restart App on Server (Optional)
         uses: appleboy/ssh-action@v1.0.0
@@ -50,5 +50,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd ${{ secrets.REACT_APP_WEB_ROOT_DIR }}
+            cd ${{ secrets.OLAIKE_ADMIN_WEB_ROOT_DIR }}
             echo "Deployment complete"
