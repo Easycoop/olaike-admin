@@ -40,7 +40,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           source: "build/*"
-          target: "/var/www/admin.olaikecoop.com.ng"
+          target: ${{ secrets.OLAIKE_ADMIN_WEB_ROOT_DIR }}
 
       - name: Restart App on Server (Optional)
         uses: appleboy/ssh-action@v1.0.0
@@ -50,5 +50,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd "/var/www/admin.olaikecoop.com.ng"
+            cd ${{ secrets.OLAIKE_ADMIN_WEB_ROOT_DIR }}
             echo "Deployment complete"
