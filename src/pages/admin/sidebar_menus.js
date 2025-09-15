@@ -1,6 +1,6 @@
 
 import { MdGroups, MdOutlinePayment, MdPhonelinkSetup } from "react-icons/md";
-import { IoMdClose, IoMdSend, IoMdSettings } from "react-icons/io";
+import { IoMdClose, IoMdSend, IoMdSettings, IoIosSettings } from "react-icons/io";
 import { BiMenu } from "react-icons/bi";
 import {
   FaCreditCard,
@@ -148,8 +148,21 @@ export const sidebarMenu = (isSuperAdmin, user) => [
   {
     id: 14,
     label: "Settings",
-    path: "/main/setting",
     icon: <IoMdSettings />,
+    children: [
+      {
+        id: 1411,
+        label: "Settings",
+        path: "/main/setting",
+        icon: <IoMdSettings />,
+      },
+      {
+        id: 1412,
+        label: "Loan/Payment Settings",
+        path: "/main/system-settings",
+        icon: <IoIosSettings />,
+      },
+    ]
   },
 ];
 

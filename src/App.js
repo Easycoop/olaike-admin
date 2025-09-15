@@ -32,6 +32,7 @@ import PublicRoute from "./route/publicRoute";
 import Thrifts from "./pages/admin.thrifts/Admin.Thrifts";
 import Kyc from "./pages/admin.kyc/Admin.Kyc";
 import LoanDetail from "./pages/admin.loan.applications/admin.loan.detail";
+import SystemSettings from "./pages/system.setting/SystemSetting";
 
 function App() {
   const { theme } = useContext(StateContext);
@@ -61,6 +62,7 @@ function App() {
                 <Route path="societies" element={<AdminSocieties />} />
                 <Route path="user/:userId" element={<AdminSingleUser />} />
                 <Route path="edit-user/:userId" element={<AdminEditUser />} />
+                <Route path="system-settings" element={ <SystemSettings />} />
                 <Route path="setting" element={<AdminSettings />} />
                 <Route path="deposit-money" element={<Payment />} />
                 <Route path="create-user" element={<AdminCreateUser />} />
