@@ -7,10 +7,12 @@ import { runValidation } from "../../utils/buchi";
 import ValidationError from "../../components/ui/form-elements/ValidaionError";
 
 const SystemSettings = () => {
-  const [interestRate, setInterestRate] = useState("");
+  const [interestRate, setInterestRate] = useState(0);
   const [interestType, setInterestType] = useState("");
   const [repaymentDuration, setRepaymentDuration] = useState("");
   const [durationType, setDurationType] = useState("");
+  const [entranceFee, setEntranceFee] = useState("");
+  const [loanApplicationFee, setLoanApplicationFee] = useState("");
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState();
 
@@ -42,6 +44,12 @@ const SystemSettings = () => {
         if(settingsData.find((setting) => setting.key === "duration_type")){
             setDurationType(settingsData.find((setting) => setting.key === "duration_type").value);
         }
+        if(settingsData.find((setting) => setting.key === "entrance_fee")){
+            setEntranceFee(settingsData.find((setting) => setting.key === "entrance_fee").value);
+        }
+        if(settingsData.find((setting) => setting.key === "loan_application_fee")){
+            setLoanApplicationFee(settingsData.find((setting) => setting.key === "loan_application_fee").value);
+        }
         console.log(settingsData)
         
     } catch (error) {
@@ -68,6 +76,14 @@ const SystemSettings = () => {
             input: { value: durationType, field: "duration_type", type: "text" },
             rules: { required: true },
         },
+        {
+            input: { value: entranceFee, field: "entrance_fee", type: "number" },
+            rules: { required: true },
+        },
+        {
+            input: { value: loanApplicationFee, field: "loan_application_fee", type: "number" },
+            rules: { required: true },
+        },
         
     ]);
     if(validate?.status === false){
@@ -84,7 +100,9 @@ const SystemSettings = () => {
             interest_rate: interestRate, 
             interest_type: interestType, 
             repayment_duration: repaymentDuration, 
-            duration_type: durationType
+            duration_type: durationType,
+            entrance_fee: entranceFee,
+            loan_application_fee: loanApplicationFee
         });
         console.log(response);
         if(response.payload?.status === 'success'){
@@ -116,6 +134,27 @@ const SystemSettings = () => {
 
       {/* Card */}
       <div className="bg-white shadow-md rounded-2xl border border-gray-100 p-6 space-y-6">
+        <h2>Payment Setting</h2>
+        <hr style={{border:"1px solid #6699FF"}} />
+        {/* Entrance Fee */}
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
+            Entrance Fee
+          </label>
+          <input
+            type="number"
+            min={0}
+            step={1}
+            value={entranceFee}
+            onChange={(e) => setEntranceFee(e.target.value)}
+            placeholder="Enter interest rate"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
+          />
+          <ValidationError validationErrors={validationErrors} field="entrance_fee" />
+        </div>
+
+      <h2>Loan Setting</h2>
+      <hr style={{border:"1px solid #6699FF"}} />
         {/* Interest Rate */}
         <div className="space-y-1">
           <label className="block text-sm font-medium text-gray-700">
@@ -132,6 +171,24 @@ const SystemSettings = () => {
           />
           <ValidationError validationErrors={validationErrors} field="interest_rate" />
         </div>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
+            Loan Application fee
+          </label>
+          <input
+            type="number"
+            min={0}
+            step={1}
+            value={loanApplicationFee}
+            onChange={(e) => setLoanApplicationFee(e.target.value)}
+            placeholder="Enter interest rate"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
+          />
+          <ValidationError validationErrors={validationErrors} field="loan_application_fee" />
+        </div>
+
+        
 
         {/* Interest Type */}
         <div className="space-y-1">
