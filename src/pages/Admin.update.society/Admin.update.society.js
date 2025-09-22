@@ -1,7 +1,5 @@
 import "./Admin.update.society.css";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { BsAsterisk } from "react-icons/bs";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   useGetSociety,
@@ -18,6 +16,7 @@ import {runValidation} from '../../utils/buchi';
 import ValidationError from '../../components/ui/form-elements/ValidaionError';
 import Modal from "../../components/ui/modal/Modal";
 import { formatDateStringToHtmlDate } from "../../utils/time";
+import KegowAccountSettings from "../system.setting/KegowSettings";
 
 
 function AdminUpdateSociety() {
@@ -427,6 +426,9 @@ function AdminUpdateSociety() {
               </div>
           </section>
           <hr />
+
+          <KegowAccountSettings groupId={societyId} />
+          <hr />
           
           <h1>Contribution Settings</h1>
           <section className="edit__user__section1 create__society__wra">
@@ -707,13 +709,8 @@ function AdminUpdateSociety() {
               </Modal>
               </div>
           </section>
-          
-          
         </div>
 
-
-
-        
       )}
     </>
   );

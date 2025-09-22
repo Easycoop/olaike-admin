@@ -64,6 +64,8 @@ function AdminDashboard() {
   useEffect(() => {
     handleGetApplications();
     handleGetDashboardData();
+    
+    console.log('user', user);
   }, []);
 
   return (

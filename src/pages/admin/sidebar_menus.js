@@ -17,7 +17,14 @@ import { HiMiniTableCells } from "react-icons/hi2";
 import { BsNodePlusFill } from "react-icons/bs";
 import { LiaHourglassEndSolid } from "react-icons/lia";
 
+const settingsControl= localStorage.getItem("easycoop_config") &&
+    JSON.parse(localStorage.getItem("easycoop_config"))?.settings
+      ? JSON.parse(localStorage.getItem("easycoop_config")).settings
+      : null
+  
+
 export const sidebarMenu = (isSuperAdmin, user) => [
+ 
   {
     id: 1,
     label: "Dashboard",
@@ -150,18 +157,66 @@ export const sidebarMenu = (isSuperAdmin, user) => [
     label: "Settings",
     icon: <IoMdSettings />,
     children: [
-      {
-        id: 1411,
-        label: "Settings",
-        path: "/main/setting",
-        icon: <IoMdSettings />,
-      },
-      {
-        id: 1412,
-        label: "Loan/Payment Settings",
+      
+      
+      
+
+      // {
+      //   id: 1413,
+      //   label: "Payment Settings",
+      //   path: "/main/payment-settings",
+      //   icon: <IoIosSettings />,
+      // },
+
+      isSuperAdmin && settingsControl?.entranceFeeControl === "Union" &&
+        {
+        id: 1415,
+        label: "System Settings",
         path: "/main/system-settings",
         icon: <IoIosSettings />,
       },
+      
+      isSuperAdmin && settingsControl?.loanSettingsControl === "Union" &&
+          {
+          id: 1412,
+          label: "Loan Settings",
+          path: "/main/loan-settings",
+          icon: <IoIosSettings />,
+        },
+      //   &&
+      // settingsControl?.loanSettingsControl === "Union" &&
+      //   {
+      //     id: 1411,
+      //     label: "Settings",
+      //     path: "/main/setting",
+      //     icon: <IoMdSettings />,
+      //   }
+    
+   !isSuperAdmin &&  settingsControl?.entranceFeeControl === "Society" &&
+      {
+        id: 1415,
+        label: "System Settings",
+        path: "/main/system-settings",
+        icon: <IoIosSettings />,
+      },
+
+    !isSuperAdmin&& settingsControl?.loanSettingsControl === "Society" &&
+      {
+        id: 1412,
+        label: "Loan Settings",
+        path: "/main/loan-settings",
+        icon: <IoIosSettings />,
+      },
+    
+    isSuperAdmin &&
+
+      {
+        id: 1414,
+        label: "Union Settings",
+        path: "/main/union-settings",
+        icon: <IoIosSettings />,
+      }
+      
     ]
   },
 ];

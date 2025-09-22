@@ -58,7 +58,8 @@ const Login = () => {
         setErrorMessage(response.message);
       }
     } catch (error) {
-      setErrorMessage(error.response.message);
+      console.log(error);
+      setErrorMessage(error.response?.message);
     } finally {
       setLoading(false);
     }

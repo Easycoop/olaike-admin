@@ -6,6 +6,7 @@ import {
   LOGOUT,
   LOGIN_UPDATE_SUCCESS,
   UPDATE_ACCESS_TOKEN,
+  UPDATE_USER,
 } from "../types/authTypes";
 
 const initialState = {
@@ -53,6 +54,8 @@ export default function authReducer(state = initialState, action) {
       return { ...state, isAuthorized: true, user: payload, loading: false };
     case UPDATE_ACCESS_TOKEN:
       return { ...state, accessToken: payload };
+    case UPDATE_USER:
+      return {...state,user: payload.user};
 
     default:
       return state;
