@@ -29,6 +29,7 @@ import { sidebarMenu } from "./sidebar_menus";
 function Admin() {
   const { roles, user } = useSelector((state) => state.auth);
   const isSuperAdmin = roles?.includes("SuperAdmin");
+  console.log('is super admin', isSuperAdmin)
   const logout = useLogout();
   const navigate = useNavigate();
 

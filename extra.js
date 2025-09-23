@@ -21,10 +21,8 @@ const settingsControl= localStorage.getItem("easycoop_config") &&
     JSON.parse(localStorage.getItem("easycoop_config"))?.settings
       ? JSON.parse(localStorage.getItem("easycoop_config")).settings
       : null
+  
 
-      console.log("Settings control")
-console.log(settingsControl);
-// console.log('isSperAdmin', isSuperAdmin)
 export const sidebarMenu = (isSuperAdmin, user) => [
  
   {
@@ -159,70 +157,77 @@ export const sidebarMenu = (isSuperAdmin, user) => [
     label: "Settings",
     icon: <IoMdSettings />,
     children: [
-  ...(isSuperAdmin && settingsControl?.entranceFeeControl === "Union"
-    ? [{
-        id: 1421,
-        label: "System Settings",
-        path: "/main/system-settings",
-        icon: <IoIosSettings />,
-      }]
-    : []),
+      
+      
+      
 
-  ...(isSuperAdmin && settingsControl?.loanSettingsControl === "Union"
-    ? [{
-        id: 1420,
-        label: "Loan Settings",
-        path: "/main/loan-settings",
-        icon: <IoIosSettings />,
-      }]
-    : []),
+      // {
+      //   id: 1413,
+      //   label: "Payment Settings",
+      //   path: "/main/payment-settings",
+      //   icon: <IoIosSettings />,
+      // },
 
-    ...(isSuperAdmin && settingsControl?.thriftControl === "Union"
-    ? [{
-        id: 1421,
-        label: "Thrift Settings",
-        path: "/main/thrift-settings",
-        icon: <IoIosSettings />,
-      }]
-    : []),
-
-  ...(!isSuperAdmin && settingsControl?.entranceFeeControl === "Society"
-    ? [{
+      isSuperAdmin && settingsControl?.entranceFeeControl === "Union" &&
+        {
         id: 1415,
         label: "System Settings",
         path: "/main/system-settings",
         icon: <IoIosSettings />,
-      }]
-    : []),
-
-  ...(!isSuperAdmin && settingsControl?.loanSettingsControl === "Society"
-    ? [{
+      },
+      
+      isSuperAdmin && settingsControl?.loanSettingsControl === "Union" &&
+      {
         id: 1412,
         label: "Loan Settings",
         path: "/main/loan-settings",
         icon: <IoIosSettings />,
-      }]
-    : []),
+      },
 
-     ...(!isSuperAdmin && settingsControl?.thriftControl === "Society"
-    ? [{
-        id: 1430,
+      isSuperAdmin && settingsControl?.thriftControl === "Union" &&
+      {
+        id: 1413,
         label: "Thrift Settings",
         path: "/main/thrift-settings",
         icon: <IoIosSettings />,
-      }]
-    : []),
+      },
+      
+     
+    
+   !isSuperAdmin &&  settingsControl?.entranceFeeControl === "Society" &&
+      {
+        id: 1415,
+        label: "System Settings",
+        path: "/main/system-settings",
+        icon: <IoIosSettings />,
+      },
 
-  ...(isSuperAdmin
-    ? [{
+    !isSuperAdmin&& settingsControl?.loanSettingsControl === "Society" &&
+      {
+        id: 1412,
+        label: "Loan Settings",
+        path: "/main/loan-settings",
+        icon: <IoIosSettings />,
+      },
+
+     !isSuperAdmin && settingsControl?.thriftControl === "Society" &&
+      {
+        id: 1413,
+        label: "Thrift Settings",
+        path: "/main/thrift-settings",
+        icon: <IoIosSettings />,
+      },
+    
+    isSuperAdmin &&
+
+      {
         id: 1414,
         label: "Union Settings",
         path: "/main/union-settings",
         icon: <IoIosSettings />,
-      }]
-    : []),
-]
-
+      }
+      
+    ]
   },
 ];
 

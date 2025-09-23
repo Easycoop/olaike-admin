@@ -218,15 +218,15 @@ useEffect(() => {
             });
 
             if (response?.payload?.status === "success") {
-            toastManager.addToast({
-                message: "Loan settings updated successfully",
-                type: "success",
-            });
+              toastManager.addToast({
+                  message: "Loan settings updated successfully",
+                  type: "success",
+              });
             } else {
-            toastManager.addToast({
-                message: response?.payload?.message || "Failed to update loan settings",
-                type: "error",
-            });
+              toastManager.addToast({
+                  message: response?.payload?.message || "Failed to update loan settings",
+                  type: "error",
+              });
             }
         } catch (error) {
             console.error("Error updating loan settings", error);
