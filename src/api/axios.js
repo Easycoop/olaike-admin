@@ -11,7 +11,7 @@ const api = axios.create({
     "Content-Type": "application/json",
     "admin-token": state.auth,
   },
-  timeout: 10000, // Timeout of 10 seconds
+  timeout: 30000, // Timeout of 10 seconds
   withCredentials: false, // Send cookies when making requests
   validateStatus: function (status) {
     return status >= 200 && status < 300; // Default status checking function
@@ -35,8 +35,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
+    console.log(error)
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const state = store.getState();
       const refreshToken = state.auth.refreshToken;

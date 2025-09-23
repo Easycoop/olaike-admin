@@ -40,9 +40,9 @@ const SidebarMenuItem = ({ item, activeColorId, setColorId, isChild}) => {
       {hasChildren && expanded && (
         
         <div className="border-l border-gray-200 ml-3 mt-2 block ">
-          {item.children.map((child) => (
+          {item.children.map((child, index) => (
             <SidebarMenuItem
-              key={child.id}
+              key={index}
               item={child}
               activeColorId={activeColorId}
               setColorId={setColorId}
