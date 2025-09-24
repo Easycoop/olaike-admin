@@ -11,7 +11,8 @@ import {
   getContributions,
   updateContribution,
   getContributionThrifts,
-  deleteContribution
+  deleteContribution,
+  updateThriftSettings
 } from "../../services/societyService";
 
 export const doCreateSociety = createAsyncThunk(
@@ -135,6 +136,18 @@ export const doDeleteContribution = createAsyncThunk(
   }
 )
 
+export const doUpdateThriftSettings = createAsyncThunk(
+  "society/doUpdateThriftSettings",
+  async ({groupId, payload}, { rejectWithValue }) => {
+    try {
+      const data = await updateThriftSettings(groupId, payload);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message);
+    }
+  }
+)
+
 export const useGetSocieties = () => useDispatcher(doGetSocieties);
 export const useCreateSociety = () => useDispatcher(doCreateSociety);
 export const useUpdateSociety = () => useDispatcher(doUpdateSociety);
@@ -145,3 +158,4 @@ export const useGetContributions = () => useDispatcher(dogetContributions);
 export const useUpdateContribution = () => useDispatcher(doUpdateContribution);
 export const useGetContributionThrifts = () => useDispatcher(doGetContributionThrifts);
 export const useDeleteContribution = () => useDispatcher(doDeleteContribution);
+export const useUpdateThriftSettings = () => useDispatcher(doUpdateThriftSettings);

@@ -64,6 +64,7 @@ export const doLoginAction = (payload) => async (dispatch) => {
 
   try {
     const response = await login(payload);
+    console.log(response);
     dispatch(
       loginSuccess({
         user: response.data.user,
@@ -76,8 +77,9 @@ export const doLoginAction = (payload) => async (dispatch) => {
     );
     return response;
   } catch (error) {
+    console.error(error);
     dispatch(loginFailure(error.message || "Login failed"));
-    return error;
+    throw error;
   }
 };
 

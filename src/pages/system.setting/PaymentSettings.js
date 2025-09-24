@@ -6,12 +6,11 @@ import { ClipLoader } from "react-spinners";
 import { runValidation } from "../../utils/buchi";
 import ValidationError from "../../components/ui/form-elements/ValidaionError";
 
-const SystemSettings = () => {
+const PaymentSettings = () => {
   const [interestRate, setInterestRate] = useState(0);
   const [interestType, setInterestType] = useState("");
   const [repaymentDuration, setRepaymentDuration] = useState("");
   const [durationType, setDurationType] = useState("");
-  const [entranceFee, setEntranceFee] = useState("");
   const [loanApplicationFee, setLoanApplicationFee] = useState("");
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState();
@@ -44,9 +43,7 @@ const SystemSettings = () => {
         if(settingsData.find((setting) => setting.key === "duration_type")){
             setDurationType(settingsData.find((setting) => setting.key === "duration_type").value);
         }
-        if(settingsData.find((setting) => setting.key === "entrance_fee")){
-            setEntranceFee(settingsData.find((setting) => setting.key === "entrance_fee").value);
-        }
+        
         if(settingsData.find((setting) => setting.key === "loan_application_fee")){
             setLoanApplicationFee(settingsData.find((setting) => setting.key === "loan_application_fee").value);
         }
@@ -77,10 +74,6 @@ const SystemSettings = () => {
             rules: { required: true },
         },
         {
-            input: { value: entranceFee, field: "entrance_fee", type: "number" },
-            rules: { required: true },
-        },
-        {
             input: { value: loanApplicationFee, field: "loan_application_fee", type: "number" },
             rules: { required: true },
         },
@@ -101,7 +94,6 @@ const SystemSettings = () => {
             interest_type: interestType, 
             repayment_duration: repaymentDuration, 
             duration_type: durationType,
-            entrance_fee: entranceFee,
             loan_application_fee: loanApplicationFee
         });
         console.log(response);
@@ -136,22 +128,7 @@ const SystemSettings = () => {
       <div className="bg-white shadow-md rounded-2xl border border-gray-100 p-6 space-y-6">
         <h2>Payment Setting</h2>
         <hr style={{border:"1px solid #6699FF"}} />
-        {/* Entrance Fee */}
-        <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Entrance Fee
-          </label>
-          <input
-            type="number"
-            min={0}
-            step={1}
-            value={entranceFee}
-            onChange={(e) => setEntranceFee(e.target.value)}
-            placeholder="Enter interest rate"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
-          />
-          <ValidationError validationErrors={validationErrors} field="entrance_fee" />
-        </div>
+        
 
       <h2>Loan Setting</h2>
       <hr style={{border:"1px solid #6699FF"}} />
@@ -259,4 +236,4 @@ const SystemSettings = () => {
   );
 };
 
-export default SystemSettings;
+export default PaymentSettings;
