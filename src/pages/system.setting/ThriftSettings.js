@@ -84,6 +84,7 @@ const ThriftSettings = () => {
   const [formData, setFormData] = useState({
     minimum_thrift_amount: "",
     thrift_lateness_fee: "",
+    loanee_thrift_lateness_fee:"",
     thrift_frequency: "",
   });
   
@@ -130,6 +131,7 @@ const ThriftSettings = () => {
             minimum_thrift_amount: group.minimumThriftAmount || "",
             thrift_lateness_fee: group.thriftLatenessFee || "",
             thrift_frequency: group.thriftFrequency || "",
+            loanee_thrift_lateness_fee: group.loaneeThriftLatenessFee || "",
           });
         }
       } catch (err) {
@@ -150,22 +152,14 @@ const ThriftSettings = () => {
 
 
   const validateForm = async () => {
-      console.log('validation')
-    //   console.log({
-    //       loan_interest_rate: loanInterestRate,
-    //       loan_interest_type: loanInterestType,
-    //       loan_repayment_duration: loanRepaymentDuration,
-    //       loan_duration_type: loanDurationType,
-    //       loan_application_fee: loanApplicationFee
-    //   })
       const validate = await runValidation([
         { input: { value: formData.minimum_thrift_amount, field: "minimum_thrift_amount", type: "number" }, rules: { required: true } },
         { input: { value: formData.thrift_frequency, field: "thrift_frequency", type: "text" }, rules: { required: true } },
         { input: { value: formData.thrift_lateness_fee, field: "thrift_lateness_fee", type: "number" }, rules: { required: true } },
+        { input: { value: formData.loanee_thrift_lateness_fee, field: "loanee_thrift_lateness_fee", type: "number" }, rules: { required: true } },
       ]);
   
       if (validate?.status === false) {
-        console.log(validate)
         setValidationErrors(validate.errors);
       } else {
           setValidationErrors(null);
@@ -251,7 +245,7 @@ const ThriftSettings = () => {
 
       {/* Thrift Lateness Fee */}
       <div>
-        <label className="block text-sm font-medium">Thrift Lateness Fee</label>
+        <label className="block text-sm font-medium">Thrift Lateness Fee </label>
         <input
           type="number"
           name="thrift_lateness_fee"
@@ -261,6 +255,20 @@ const ThriftSettings = () => {
           placeholder="Enter lateness fee"
         />
         <ValidationError validationErrors={validationErrors} field="thrift_lateness_fee" />
+      </div>
+
+       {/* Thrift Lateness Fee */}
+      <div>
+        <label className="block text-sm font-medium">Loanee Thrift Lateness Fee </label>
+        <input
+          type="number"
+          name="loanee_thrift_lateness_fee"
+          value={formData.loanee_thrift_lateness_fee}
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+          placeholder="thrift lateness fee for members on loan"
+        />
+        <ValidationError validationErrors={validationErrors} field="loanee_thrift_lateness_fee" />
       </div>
 
       {/* Thrift Frequency */}
