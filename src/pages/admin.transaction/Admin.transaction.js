@@ -40,6 +40,7 @@ function AdminTransaction() {
   const [totalPages, setTotalPages] = useState(1);
   const [creditSum, setCreditSum] = useState(0);
   const [debitSum, setDebitSum] = useState(0);
+  // const [entries, setEntries] = useState(10);
   // const [netVolume, setNetVolume] = useState(creditSum - debitSum);
 
   function calculateTransactionSums(transactions) {
@@ -140,7 +141,7 @@ function AdminTransaction() {
   };
   
   useEffect(() => {
-    handleGetTransactions(1, 10, status);
+    handleGetTransactions(1, pageSize, status);
     handleGetSocieties();
   }, []);
 
@@ -153,8 +154,20 @@ function AdminTransaction() {
       <div className="admin__transaction">
         <section className="admin__transaction__section__one">
           <span className="admin__transaction__section__header">
-            <h1>Transaction summary</h1>
+            {/* <h1>Transaction summary</h1> */}
             <div className="row gap-2">
+              <div className="col-4">
+                <label>Entries</label>
+                <select className="form-control" defaultValue={10} onChange={(e) => setPageSize(e.target.value)}>
+                  
+                  <option value={10}>10</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                  <option value={500}>500</option>
+                  <option value={1000}>1000</option>
+                  <option value={"all"}>All</option>
+                </select>  
+              </div>
               {
                 isSuperAdmin &&
                 <div className="col-4">
@@ -199,7 +212,7 @@ function AdminTransaction() {
               </div>
               <div className="col-4">
               {/* <label>To</label>  */}<br />
-                <button className="btn btn-primary d-block" onClick={()=>{handleGetTransactions(1, 10, status)}}>Filter</button>
+                <button className="btn btn-primary d-block" onClick={()=>{handleGetTransactions(1, pageSize, status)}}>Filter</button>
               </div>
             </div>
             
