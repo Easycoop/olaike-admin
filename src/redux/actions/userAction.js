@@ -7,6 +7,7 @@ import {
   getUser,
   getUsers,
   updateUser,
+  batchOnboarding
 } from "../../services/userServices";
 
 export const doGetUsers = createAsyncThunk(
@@ -70,8 +71,21 @@ export const doAssignRole = createAsyncThunk(
   }
 );
 
+export const doBatchOnboarding = createAsyncThunk(
+  "users/doBatchOnboarding",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const data = await batchOnboarding(payload);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
 export const useGetUsers = () => useDispatcher(doGetUsers);
 export const useGetUser = () => useDispatcher(doGetUser);
 export const useUpdateUser = () => useDispatcher(doUpdateUser);
 export const useCreateUsers = () => useDispatcher(doCreateUsers);
 export const useAssignRole = () => useDispatcher(doAssignRole);
+export const useBatchOnboarding = () => useDispatcher(doBatchOnboarding);
