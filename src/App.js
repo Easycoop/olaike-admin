@@ -36,6 +36,7 @@ import SystemSettings from "./pages/system.setting/SystemSettings";
 import UnionSettings from "./pages/system.setting/UnionSetting";
 import LoanSettings from "./pages/system.setting/LoanSettings";
 import ThriftSettings from "./pages/system.setting/ThriftSettings";
+import BatchOnboarding from "./pages/admin/admin.batch-onboarding/BatchOnbboard";
 
 function App() {
   const { theme } = useContext(StateContext);
@@ -50,6 +51,7 @@ function App() {
             <Route path="/" element={<PrivateRoute />}>
               <Route path="/main" element={<Admin />}>
                 <Route index element={<AdminDashboard />} />
+                 <Route path="batch-onboarding" element={<BatchOnboarding />} />
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="users" element={<DashboardUser />} />
                 <Route path="kyc" element={<Kyc />} />
