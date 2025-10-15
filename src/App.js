@@ -16,7 +16,7 @@ import ScrollToTop from "./utils/ScrollToTop";
 import "./app.css";
 import AdminSingleUser from "./pages/admin.single.user/Admin.single.user";
 import AdminEditUser from "./pages/admin.edit.user/Admin.edit.user";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import StateContext from "./context/StateProvider";
 import AdminCreateSociety from "./pages/admin.create.society/Admin.create.society";
 import ToasterContainer from "./components/ui/toast/ToasterContainer";
@@ -37,8 +37,23 @@ import UnionSettings from "./pages/system.setting/UnionSetting";
 import LoanSettings from "./pages/system.setting/LoanSettings";
 import ThriftSettings from "./pages/system.setting/ThriftSettings";
 import BatchOnboarding from "./pages/admin/admin.batch-onboarding/BatchOnbboard";
+import {setFavicon, setSiteTitle} from "./utils/setConfigMetadata";
+import {ConfigContext} from "./context/ConfigProvider";
 
 function App() {
+  const { config, fetchConfig } = useContext(ConfigContext);
+  useEffect(() => {
+    // Change favicon dynamically
+    if(config.logos?.fav_icon){
+      setFavicon(config.logos.fav_icon);
+      setSiteTitle(config.app_data.app_name);
+    }else{
+      fetchConfig();
+    }
+    console.log("config retrieved", config)
+    // setFavicon("/icons/dark-favicon.ico");\
+  }, []);
+
   const { theme } = useContext(StateContext);
   return (
     <div theme={theme ? `${theme}` : "#00208a"}>
