@@ -11,7 +11,7 @@ const api = axios.create({
     "Content-Type": "application/json",
     "admin-token": state.auth,
   },
-  timeout: 30000, // Timeout of 10 seconds
+  timeout: 120000, // Timeout of 10 seconds
   withCredentials: false, // Send cookies when making requests
   validateStatus: function (status) {
     return status >= 200 && status < 300; // Default status checking function
