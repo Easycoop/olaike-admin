@@ -138,10 +138,11 @@ const Kyc = () => {
                   </>
                    
                   :
-                  <>
+                  <div className="flex gap-1 items-center justify-between">
                   Approved 
                   <FaCircle style={{ color: 'green' }} /> 
-                  </>
+                  <button onClick={() => handleReject(info)} className="btn-danger">Revert Approval</button>
+                  </div>
                   
                 }
                 
@@ -162,6 +163,7 @@ const Kyc = () => {
               placeholder="Enter reason for rejection"
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
+              className="border"
             />
             <div style={{ marginTop: '1rem', textAlign: 'right' }}>
               <button onClick={() => setShowModal(false)} style={{ marginRight: 8 }} >Go Back</button>
