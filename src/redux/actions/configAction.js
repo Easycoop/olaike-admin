@@ -16,8 +16,8 @@ export const doAppConfig = createAsyncThunk(
 
 export const doUpdateLoanSettings = createAsyncThunk(
   "config/doUpdateLoanSettings",
-  async ({groupId, payload}, { rejectWithValue }) => {
-    console.log(groupId);
+  async ({groupId, payload}, {dispatch, rejectWithValue }) => {
+    
     try {
       const data = await updateLoanSettings(groupId, payload);
       return data;

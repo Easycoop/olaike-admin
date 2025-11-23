@@ -2,7 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { useDispatcher } from "../../utils/useDispatcher";
 import { getWallet, updateKegowData, getGroupWallet } from "../../services/walletService";
-import { store } from "../store";
 import {UPDATE_USER } from "../types/authTypes";
 
 
