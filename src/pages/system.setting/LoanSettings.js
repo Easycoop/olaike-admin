@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { runValidation } from "../../utils/buchi";
@@ -84,12 +85,12 @@ export const SelectSociety = ({setGroupId, setIsOpen, setChosenSociety}) => {
 
 const LoanSettings = () => {
 
-    
     const [loanInterestRate, setLoanInterestRate] = useState("");
     const [loanInterestType, setLoanInterestType] = useState("");
     const [loanRepaymentDuration, setLoanRepaymentDuration] = useState("");
     const [loanDurationType, setLoanDurationType] = useState("");
     const [loanApplicationFee, setLoanApplicationFee] = useState("");
+    const [loanReturneeApplicationFee, setLoanReturneeApplicationFee] = useState("");
     const [validationErrors, setValidationErrors] = useState();
     const [loading, setLoading] = useState(false);
     const [groupId, setGroupId] = useState();
@@ -121,11 +122,12 @@ const LoanSettings = () => {
             const response = await getLoanSettings(groupId);
             const data = response?.payload?.data;
             if (data) {
-            setLoanInterestRate(data.loanInterestRate ?? "");
-            setLoanInterestType(data.loanInterestType ?? "");
-            setLoanRepaymentDuration(data.loanRepaymentDuration ?? "");
-            setLoanDurationType(data.loanDurationType ?? "");
-            setLoanApplicationFee(data.loanApplicationFee ?? "");
+              setLoanInterestRate(data.loanInterestRate ?? "");
+              setLoanInterestType(data.loanInterestType ?? "");
+              setLoanRepaymentDuration(data.loanRepaymentDuration ?? "");
+              setLoanDurationType(data.loanDurationType ?? "");
+              setLoanApplicationFee(data.loanApplicationFee ?? "");
+              setLoanReturneeApplicationFee(data.returneeLoanApplicationFee ?? "");
             }
         } catch (error) {
             console.error("Error fetching group settings", error);
@@ -145,9 +147,9 @@ useEffect(() => {
         setLoanRepaymentDuration(settingsControl.union?.loanRepaymentDuration ?? "");
         setLoanDurationType(settingsControl.union?.loanDurationType ?? "");
         setLoanApplicationFee(settingsControl.union?.loanApplicationFee ?? "");
+        setLoanReturneeApplicationFee(settingsControl.union?.returneeLoanApplicationFee ?? "");
     }
 
-    // ;
 }, [groupId]);
 
 useEffect(() => {
@@ -159,27 +161,23 @@ useEffect(() => {
   }
 }, [settingsControl, isSuperAdmin, user]);
 
-
-// useEffect(() => {
-//     console.log("loanInterestRate", loanInterestRate);
-// }, [loanInterestRate])
-
-
   const validateForm = async () => {
-    console.log('validation')
     console.log({
         loan_interest_rate: loanInterestRate,
         loan_interest_type: loanInterestType,
         loan_repayment_duration: loanRepaymentDuration,
         loan_duration_type: loanDurationType,
-        loan_application_fee: loanApplicationFee
-    })
+        loan_application_fee: loanApplicationFee,
+        loan_returnee_application_fee: loanReturneeApplicationFee
+    });
+
     const validate = await runValidation([
       { input: { value: loanInterestRate, field: "loan_interest_rate", type: "number" }, rules: { required: true } },
       { input: { value: loanInterestType, field: "loan_interest_type", type: "text" }, rules: { required: true } },
       { input: { value: loanRepaymentDuration, field: "loan_repayment_duration", type: "number" }, rules: { required: true } },
       { input: { value: loanDurationType, field: "loan_duration_type", type: "text" }, rules: { required: true } },
       { input: { value: loanApplicationFee, field: "loan_application_fee", type: "number" }, rules: { required: true } },
+      { input: { value: loanReturneeApplicationFee, field: "loan_returnee_application_fee", type: "number" }, rules: { required: true } }
     ]);
 
     if (validate?.status === false) {
@@ -214,8 +212,11 @@ useEffect(() => {
                 loan_repayment_duration: loanRepaymentDuration,
                 loan_duration_type: loanDurationType,
                 loan_application_fee: loanApplicationFee,
+                loan_returnee_application_fee: loanReturneeApplicationFee
             },
             });
+
+            console.log("uplade settings resp", response)
 
             if (response?.payload?.status === "success") {
               toastManager.addToast({
@@ -229,7 +230,7 @@ useEffect(() => {
               });
             }
         } catch (error) {
-            console.error("Error updating loan settings", error);
+            console.log("Error updating loan settings", error);
             toastManager.addToast({
             message: error.message || "Unexpected error occurred",
             type: "error",
@@ -242,7 +243,7 @@ useEffect(() => {
 
   return (
     <div className="bg-white shadow-md rounded-2xl border border-gray-100 p-6 space-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center ">
             <h2 className="text-lg font-semibold text-[#003399]">Loan Settings</h2>
             { isSuperAdmin && settingsControl?.loanSettingsControl === 'Society' && 
                 <div className="flex justify-between items-center gap-2">
@@ -256,74 +257,89 @@ useEffect(() => {
             
         </div>
       
-      <hr className="border-[#6699FF]" />
+      {/* <hr className="border-[#6699FF]" /> */}
+      <div className="flex justify-between flex-wrap">
+       
+        {/* Interest Rate */}
+        <div className="space-y-1 w-5/12 mb-4">
+          <label className="block text-sm font-medium text-gray-700">Loan Interest Rate (%)</label>
+          <input
+            type="number"
+            value={loanInterestRate}
+            onChange={(e) => setLoanInterestRate(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
+          />
+          <ValidationError validationErrors={validationErrors} field="loan_interest_rate" />
+        </div>
 
-      {/* Interest Rate */}
-      <div className="space-y-1">
-        <label className="block text-sm font-medium text-gray-700">Loan Interest Rate (%)</label>
-        <input
-          type="number"
-          value={loanInterestRate}
-          onChange={(e) => setLoanInterestRate(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
-        />
-        <ValidationError validationErrors={validationErrors} field="loan_interest_rate" />
+        {/* Interest Type */}
+        <div className="space-y-1 w-5/12 mb-4">
+          <label className="block text-sm font-medium text-gray-700">Interest Type</label>
+          <select
+            value={loanInterestType}
+            onChange={(e) => setLoanInterestType(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
+          >
+            <option value="" disabled>Select type</option>
+            <option value="fixed">Fixed</option>
+            <option value="reduction">Reduction</option>
+          </select>
+          <ValidationError validationErrors={validationErrors} field="loan_interest_type" />
+        </div>
+
+        {/* Repayment Duration */}
+        <div className="space-y-1 w-5/12 mb-4">
+          <label className="block text-sm font-medium text-gray-700">Repayment Duration</label>
+          <input
+            type="number"
+            value={loanRepaymentDuration}
+            onChange={(e) => setLoanRepaymentDuration(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
+          />
+          <ValidationError validationErrors={validationErrors} field="loan_repayment_duration" />
+        </div>
+
+        {/* Duration Type */}
+        <div className="space-y-1 w-5/12 mb-4">
+          <label className="block text-sm font-medium text-gray-700">Duration Type</label>
+          <select
+            value={loanDurationType}
+            onChange={(e) => setLoanDurationType(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
+          >
+            <option value="" disabled>Select duration type</option>
+            <option value="days">Days</option>
+            <option value="weeks">Weeks</option>
+          </select>
+          <ValidationError validationErrors={validationErrors} field="loan_duration_type" />
+        </div>
+
+        {/* Loan Application Fee */}
+        <div className="space-y-1 w-5/12 mb-4">
+          <label className="block text-sm font-medium text-gray-700">First Time Loan Application Fee</label>
+          <input
+            type="number"
+            value={loanApplicationFee}
+            onChange={(e) => setLoanApplicationFee(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
+          />
+          <ValidationError validationErrors={validationErrors} field="loan_application_fee" />
+        </div>
+        
+        {/*Returnee Loan Application Fee */}
+        <div className="space-y-1 w-5/12 mb-4">
+          <label className="block text-sm font-medium text-gray-700">Returnee Loan Application Fee</label>
+          <input
+            type="number"
+            value={loanReturneeApplicationFee}
+            onChange={(e) => setLoanReturneeApplicationFee(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
+          />
+          <ValidationError validationErrors={validationErrors} field="returnee_loan_application_fee" />
+        </div>
+
       </div>
-
-      {/* Interest Type */}
-      <div className="space-y-1">
-        <label className="block text-sm font-medium text-gray-700">Interest Type</label>
-        <select
-          value={loanInterestType}
-          onChange={(e) => setLoanInterestType(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
-        >
-          <option value="" disabled>Select type</option>
-          <option value="fixed">Fixed</option>
-          <option value="reduction">Reduction</option>
-        </select>
-        <ValidationError validationErrors={validationErrors} field="loan_interest_type" />
-      </div>
-
-      {/* Repayment Duration */}
-      <div className="space-y-1">
-        <label className="block text-sm font-medium text-gray-700">Repayment Duration</label>
-        <input
-          type="number"
-          value={loanRepaymentDuration}
-          onChange={(e) => setLoanRepaymentDuration(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
-        />
-        <ValidationError validationErrors={validationErrors} field="loan_repayment_duration" />
-      </div>
-
-      {/* Duration Type */}
-      <div className="space-y-1">
-        <label className="block text-sm font-medium text-gray-700">Duration Type</label>
-        <select
-          value={loanDurationType}
-          onChange={(e) => setLoanDurationType(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
-        >
-          <option value="" disabled>Select duration type</option>
-          <option value="days">Days</option>
-          <option value="weeks">Weeks</option>
-        </select>
-        <ValidationError validationErrors={validationErrors} field="loan_duration_type" />
-      </div>
-
-      {/* Loan Application Fee */}
-      <div className="space-y-1">
-        <label className="block text-sm font-medium text-gray-700">Loan Application Fee</label>
-        <input
-          type="number"
-          value={loanApplicationFee}
-          onChange={(e) => setLoanApplicationFee(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6699FF]"
-        />
-        <ValidationError validationErrors={validationErrors} field="loan_application_fee" />
-      </div>
-
+      
       <button
         onClick={validateForm}
         className="w-full bg-[#003399] hover:bg-[#002080] text-white font-medium py-2 px-4 rounded-lg transition-colors"

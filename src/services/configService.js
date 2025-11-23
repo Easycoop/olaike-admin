@@ -22,8 +22,10 @@ export const updateLoanSettings = async (groupId, payload) => {
   
     try {
         const response = await api.post(`/admin/update-loan-settings/${groupId}`, payload);
+        console.log('loan update response', response)
         return response?.data;
     } catch (error) {
+        console.log('loan update error', error)
         if (error.response) {
             error.message = `${ error.response.data.error || error.response.statusText }`;
         } else if (error.request) {
