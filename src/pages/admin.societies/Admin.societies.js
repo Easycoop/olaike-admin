@@ -1,15 +1,14 @@
 import "./Admin.societies.css";
-import { useContext, useEffect, useState, useRef } from "react";
+import {  useEffect, useState, useRef } from "react";
 import { PiCircleFill } from "react-icons/pi";
-import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import Loading from "../../components/splash/loading/Loading";
 import NoResult from "../../components/splash/no-result/NoResult";
 import { useNavigate } from "react-router-dom";
 import { useGetSocieties, useGetSocietyMembers } from "../../redux/actions/societyAction";
 import {useAssignRole} from '../../redux/actions/userAction';
-import { BiPen } from "react-icons/bi";
-import { BsPen } from "react-icons/bs";
+import { BsPen, BsEye } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 function AdminSocieties() {
   const lastTransaction = useRef();
@@ -17,8 +16,7 @@ function AdminSocieties() {
   const getSocietyMembers = useGetSocietyMembers();
   const assignRole = useAssignRole();
 
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [loading] = useState(false);
   const [result, setResult] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [groupMembers, setGroupMembers] = useState([]);
@@ -35,15 +33,14 @@ function AdminSocieties() {
         response?.payload.status === 200 ||
         response?.payload.status === "success"
       ) {
-        setErrorMessage("");
 
         setResult(response.payload.data.groups);
         return;
       } else {
-        setErrorMessage(response.message);
+        console.log(response.message);
       }
     } catch (error) {
-      setErrorMessage(error.response.message);
+      console.log(error.response.message);
     } finally {
     }
   };
@@ -56,12 +53,11 @@ function AdminSocieties() {
         response?.payload.status === 200 ||
         response?.payload.status === "success"
       ) {
-        setErrorMessage("");
 
         setGroupMembers(response.payload.data);
         return;
       } else {
-        setErrorMessage(response.message);
+        console.log(response.message);
       }
     } catch (error) {
       console.log(error);
@@ -79,12 +75,12 @@ function AdminSocieties() {
         response?.payload.status === 200 ||
         response?.payload.status === "success"
       ) {
-        setErrorMessage("");
+        
         setModalIsOpen(false);
         handleGetSocieties();
         return;
       } else {
-        setErrorMessage(response.message);
+        console.log(response.message);
       }
     } catch (error) {
       console.log(error);
@@ -212,13 +208,20 @@ function AdminSocieties() {
                       {item.status}
                     </span>
                   </h1>
-                  <h1
+                  <Link
                     className="admin__transaction__section__two__entry__status"
-                    onClick={() => navigate(`/main/edit-society/${item.id}`)}
+                    to={`/main/societies/${item.id}`}
+                  >
+                    View
+                    <BsEye />
+                  </Link>
+                  <Link
+                    className="admin__transaction__section__two__entry__status"
+                    to={`/main/edit-society/${item.id}`}
                   >
                     Edit
                     <BsPen />
-                  </h1>
+                  </Link>
                   {item?.AdminUsers.length == 0 ?
                     <button className="btn btn-primary" onClick={()=>openModal(item.id)}> Add an admin</button>
                     :
@@ -252,7 +255,6 @@ function AdminSocieties() {
             <h3 >Attach an admin </h3>
             <button onClick={()=>setModalIsOpen(false)} className="btn-danger btn">close</button>
           </div>
-          
           
           <form>
             <div className="form-group">
