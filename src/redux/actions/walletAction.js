@@ -45,7 +45,7 @@ export const doUpdateKegowData = createAsyncThunk(
       // console.log('data', data)
       return data;
     } catch (error) {
-      console.log('rejecttion error', error)
+      console.log('rejection error', error)
       return rejectWithValue(error.message || "Action failed");
     }
   }

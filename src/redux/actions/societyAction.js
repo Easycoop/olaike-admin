@@ -5,6 +5,7 @@ import {
   createSociety,
   getSocieties,
   getSociety,
+  getSocietyDetail,
   getSocietyMembers,
   updateSociety,
   createContribution,
@@ -57,6 +58,18 @@ export const doGetSociety = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const data = await getSociety(payload);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
+export const doGetSocietyDetail = createAsyncThunk(
+  "society/doGetSocietyDetail",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const data = await getSocietyDetail(payload);
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Action failed");
@@ -159,3 +172,4 @@ export const useUpdateContribution = () => useDispatcher(doUpdateContribution);
 export const useGetContributionThrifts = () => useDispatcher(doGetContributionThrifts);
 export const useDeleteContribution = () => useDispatcher(doDeleteContribution);
 export const useUpdateThriftSettings = () => useDispatcher(doUpdateThriftSettings);
+export const useGetSocietyDetail = () => useDispatcher(doGetSocietyDetail);
