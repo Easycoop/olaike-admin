@@ -39,6 +39,7 @@ import ThriftSettings from "./pages/system.setting/ThriftSettings";
 import BatchOnboarding from "./pages/admin/admin.batch-onboarding/BatchOnbboard";
 import {setFavicon, setSiteTitle} from "./utils/setConfigMetadata";
 import {ConfigContext} from "./context/ConfigProvider";
+import SocietyDetailsScreen from "./pages/admin.societies/Admin.society-datail";
 
 function App() {
   const { config, fetchConfig } = useContext(ConfigContext);
@@ -79,7 +80,10 @@ function App() {
                   path="withdrawal-request/:requestId"
                   element={<SingleWithdrawalRequest />}
                 />
-                <Route path="societies" element={<AdminSocieties />} />
+                <Route path="societies" element={<AdminSocieties />} /> 
+
+                <Route path="societies/:groupId" element={<SocietyDetailsScreen />} /> 
+
                 <Route path="user/:userId" element={<AdminSingleUser />} />
                 <Route path="edit-user/:userId" element={<AdminEditUser />} />
                 <Route path="system-settings" element={ <SystemSettings />} />
@@ -96,6 +100,7 @@ function App() {
                   path="edit-society/:societyId"
                   element={<AdminUpdateSociety />}
                 />
+
                 <Route path="send-money" element={<AdminSendMoney />} />
                 <Route
                   path="loan-applications/:status"
