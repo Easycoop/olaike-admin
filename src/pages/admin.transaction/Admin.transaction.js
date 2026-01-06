@@ -71,7 +71,7 @@ function AdminTransaction() {
     };
   }
 
-  const descriptionList = ["loan repayment", "loan_application", "extra savings", "	entrance fee", "fund wallet"]
+  const descriptionList = ["loan repayment", "loan_application", "extra savings", "	entrance fee", "fund wallet", "thrift", "withdrawal", "loan_disbursement"];
 
   const { totalCredit, totalDebit, overallSum } =
     calculateTransactionSums(transactions);
@@ -277,10 +277,10 @@ function AdminTransaction() {
                   ref={lastTransaction}
                 >
                   <h1 className="admin__transaction__section__two__entry__date">
-                    { ngDateTimeFormat(transactions[i].createdAt)}
+                    { ngDateTimeFormat(item.createdAt)}
                   </h1>
                   <h1 className="admin__transaction__section__two__entry__invoice">
-                    {transactions[i].id}
+                    {item.reference}
                   </h1>
                   <h1 className="admin__transaction__section__two__entry__ammount">{`₦ ${transactions[
                     i
@@ -288,28 +288,28 @@ function AdminTransaction() {
                     minimumFractionDigits: 2,
                   })}`}</h1>
                   <h1 className="admin__transaction__section__two__entry__property">
-                    {transactions[i].description.replaceAll('_', ' ')}
+                    {item.description.replaceAll('_', ' ')}
                   </h1>
                   <h1 className="admin__transaction__section__two__entry__property">
-                    {transactions[i].Group?.name}
+                    {item.Group?.name}
                   </h1>
                   <h1 className="admin__transaction__section__two__entry__userid">
-                    {transactions[i]?.metaData?.from?.senderName}
+                    {item?.metaData?.from?.senderName}
                   </h1>
-                  <h1 className="admin__transaction__section__two__entry__status">
+                  <div className="admin__transaction__section__two__entry__status flex items-center">
                     <span>
                       <PiCircleFill
                         className={
-                          transactions[i].status == "successs"
+                          item.status == "success"
                             ? "ad__student__app__section__two__entry__status__icon successsful"
-                            : transactions[i].status == "failed"
+                            : item.status == "failed"
                             ? "ad__student__app__section__two__entry__status__icon unsuccesssful"
                             : "ad__student__app__section__two__entry__status__icon"
                         }
                       />
-                      {transactions[i].status}
+                      <span>{item.status}</span>
                     </span>
-                  </h1>
+                  </div>
                 </div>
               );
             })}
