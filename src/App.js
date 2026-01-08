@@ -40,6 +40,7 @@ import BatchOnboarding from "./pages/admin/admin.batch-onboarding/BatchOnbboard"
 import {setFavicon, setSiteTitle} from "./utils/setConfigMetadata";
 import {ConfigContext} from "./context/ConfigProvider";
 import SocietyDetailsScreen from "./pages/admin.societies/Admin.society-datail";
+import SocietyMembers from "./pages/admin.societies/Admin.society-members";
 
 function App() {
   const { config, fetchConfig } = useContext(ConfigContext);
@@ -82,7 +83,9 @@ function App() {
                 />
                 <Route path="societies" element={<AdminSocieties />} /> 
 
-                <Route path="societies/:groupId" element={<SocietyDetailsScreen />} /> 
+                <Route path="societies/:groupId" element={<SocietyDetailsScreen />} />
+
+                <Route path="societies/:groupId/members" element={<SocietyMembers />} />
 
                 <Route path="user/:userId" element={<AdminSingleUser />} />
                 <Route path="edit-user/:userId" element={<AdminEditUser />} />
@@ -102,6 +105,11 @@ function App() {
                 />
 
                 <Route path="send-money" element={<AdminSendMoney />} />
+                
+                <Route
+                  path="loan-applications/:groupId/:status"
+                  element={<AdminLoanApplication />}
+                />
                 <Route
                   path="loan-applications/:status"
                   element={<AdminLoanApplication />}
