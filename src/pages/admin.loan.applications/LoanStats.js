@@ -56,6 +56,7 @@ const LoanStats = () => {
               <div>
                 <h3>Completed loans</h3>
                 <h1>
+                  
                   {loanCounts.inactive}
                 </h1>
               </div>
