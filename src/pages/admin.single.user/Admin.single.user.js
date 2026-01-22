@@ -82,14 +82,14 @@ function AdminSingleUser() {
             <h2>Email</h2>
             <h3>{result.email}</h3>
           </span>
-          <span>
+          {/* <span>
             <h2>Country</h2>
             {result.country ? <h3> {result.country}</h3> : <h3>--</h3>}
           </span>
           <span>
             <h2>State of origin</h2>
             {result.state ? <h3> {result.state}</h3> : <h3>--</h3>}
-          </span>
+          </span> */}
           <span>
             <h2>Address</h2>
             {result.address ? <h3> {result.address}</h3> : <h3>--</h3>}
@@ -102,7 +102,9 @@ function AdminSingleUser() {
 
           <span>
             <h2>Verification status</h2>
-            <h3>{result.isVerified}</h3>
+            <h3>
+              {result.isVerified ? "Verified" : "Not Verified"} 
+            </h3>
           </span>
           <span>
             <h2>Gender</h2>
@@ -115,6 +117,14 @@ function AdminSingleUser() {
           <span>
             <h2>Wallet ID</h2>
             <h3>{wallet.id}</h3>
+          </span>
+          <span>
+            <h2>Society</h2>
+            <h3>
+              <a href={`/main/societies/${result.Group?.id}`}>
+                {result.Group?.name}
+              </a>
+            </h3>
           </span>
 
           <button onClick={() => navigate(`/main/edit-user/${userId}`)}>

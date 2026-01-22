@@ -2,70 +2,69 @@ import { BiUser } from "react-icons/bi";
 import "./Admin.dashboard.css";
 import { MdOutlinePayment, MdOutlinePendingActions } from "react-icons/md";
 import { IoMdDocument } from "react-icons/io";
-import { RiAsterisk } from "react-icons/ri";
-import { useContext, useEffect, useState } from "react";
-import StateContext from "../../context/StateProvider";
+// import { RiAsterisk } from "react-icons/ri";
+import { useEffect, useState } from "react";
+// import StateContext from "../../context/StateProvider";
 import { useNavigate } from "react-router-dom";
-import Chart from "react-apexcharts";
+// import Chart from "react-apexcharts";
 import { PiCircleFill } from "react-icons/pi";
-import { useSelector } from "react-redux";
-import { useGetApplications } from "../../redux/actions/applicationAction";
+// import { useSelector } from "react-redux";
+// import { useGetApplications } from "../../redux/actions/applicationAction";
 import { useGetDashboardData } from "../../redux/actions/miscAction";
 import {ngDateFormat} from '../../utils/time';
 
 function AdminDashboard() {
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
-  const getApplications = useGetApplications();
+  // const { user } = useSelector((state) => state.auth);
+  // const getApplications = useGetApplications();
   const getDashboardData = useGetDashboardData();
   const [data, setData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [result, setResult] = useState([]);
-  const totalResult = 2;
-  const totalUsers = 5;
+  // const [loading, setLoading] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState("");
+  // const [result, setResult] = useState([]);
+  // const totalResult = 2;
+  // const totalUsers = 5;
 
-  const handleGetApplications = async () => {
-    setLoading(true);
-    try {
-      const response = await getApplications();
-      if (response?.payload.success === true) {
-        setErrorMessage("");
-        setResult(response.payload.data.result);
-        return;
-      } else {
-        setErrorMessage(response.message);
-      }
-    } catch (error) {
-      setErrorMessage(error.response.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleGetApplications = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await getApplications();
+  //     if (response?.payload.success === true) {
+  //       setErrorMessage("");
+  //       setResult(response.payload.data.result);
+  //       return;
+  //     } else {
+  //       setErrorMessage(response.message);
+  //     }
+  //   } catch (error) {
+  //     setErrorMessage(error.response.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleGetDashboardData = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await getDashboardData();
       if (response?.payload.success === true) {
-        setErrorMessage("");
+        // setErrorMessage("");
         setData(response.payload.data);
         return;
       } else {
-        setErrorMessage(response.message);
+        // setErrorMessage(response.message);
       }
     } catch (error) {
-      setErrorMessage(error.response.message);
+      // setErrorMessage(error.response.message);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
   useEffect(() => {
-    handleGetApplications();
+    // handleGetApplications();
     handleGetDashboardData();
     
-    console.log('user', user);
   }, []);
 
   return (
@@ -85,13 +84,7 @@ function AdminDashboard() {
               <MdOutlinePendingActions className="admin__dashboard__section__one__seg__icon two" />
             </span>
             <h1>
-              {
-                result.filter(function (item, i) {
-                  if (result[i].status == "pending") {
-                    return result[i];
-                  }
-                }).length
-              }
+              {data?.pendingUsers?.length}
             </h1>
           </div>
 
@@ -162,27 +155,27 @@ function AdminDashboard() {
                 Status
               </h1>
             </div>
-            {result.map((item, i) => {
+            {data?.pendingUsers?.map((item, i) => {
               return (
                 <div
                   className="admin__dashboard__section__three__seg2__entry"
                   onClick={() => {
-                    navigate(`/main/registration-application/${result[i].id}`);
+                    navigate(`/main/user/${item.id}`);
                   }}
                 >
                   <h1 className="admin__dashboard__section__three__seg2__entry__id">
-                    {ngDateFormat(result[i].createdAt)} 
-                    {/* {result[i].createdAt} */}
+                    {ngDateFormat(item.createdAt)} 
+                    {/* {item.createdAt} */}
                   </h1>
                   <h1 className="admin__dashboard__section__three__seg2__entry__views">
-                    {`${result[i].firstName} ${result[i].lastName}`}
+                    {`${item.firstName} ${item.lastName}`}
                   </h1>
 
                   <h1 className="admin__dashboard__section__three__seg2__entry__propertytype">
-                    {result[i].email}
+                    {item.email}
                   </h1>
                   <h1 className="admin__dashboard__section__three__seg2__entry__views">
-                    {result[i]?.Group?.name}
+                    {item?.Group?.name}
                   </h1>
                   <h1 className="admin__dashboard__section__three__seg2__entry__userid">
                     EndUser
@@ -191,14 +184,14 @@ function AdminDashboard() {
                     <span>
                       <PiCircleFill
                         className={
-                          result[i].status == "success"
+                          item.status == "success"
                             ? "ad__student__app__section__two__entry__status__icon successful"
-                            : result[i].status == "failed"
+                            : item.status == "failed"
                             ? "ad__student__app__section__two__entry__status__icon unsuccessful"
                             : "ad__student__app__section__two__entry__status__icon"
                         }
                       />{" "}
-                      {result[i].status}
+                      {item.status}
                     </span>
                   </h1>
                 </div>

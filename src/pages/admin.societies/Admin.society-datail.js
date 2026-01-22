@@ -63,6 +63,7 @@ const SocietyDetailsScreen = () => {
           <h2 className="text-lg md:text-xl font-semibold text-[#003399] mt-1">
             {society?.userCount} Members
           </h2>
+          <Link to={`/main/societies/${groupId}/members`} className="text-[#003399] underline">View Members</Link>
         </div>
 
         {/* Account Balance */}
@@ -79,7 +80,7 @@ const SocietyDetailsScreen = () => {
           <h2 className="text-lg md:text-xl font-semibold text-[#ED6E0A] mt-1">
             {society?.activeLoanCount} Active Loans
           </h2>
-          <Link to={"/main/loan-applications/approved"} className="text-[#003399] underline">View Active Loans</Link>
+          <Link to={`/main/loan-applications/${groupId}/approved`} className="text-[#003399] underline">View Active Loans</Link>
         </div>
 
         {/* Pending Loan Applications */}
@@ -88,8 +89,16 @@ const SocietyDetailsScreen = () => {
           <h2 className="text-lg md:text-xl font-semibold text-[#ED6E0A] mt-1">
             {society?.pendingLoanCount} Pending
           </h2>
-          <Link to={"/main/loan-applications/pending"} className="text-[#003399] underline">View Pending Loans</Link>
+          <Link to={`/main/loan-applications/${groupId}/pending`} className="text-[#003399] underline">View Pending Loans</Link>
         </div>
+
+         {/* <div className="bg-white border border-[#003399]/20 rounded-xl p-4 shadow-sm">
+          <p className="text-sm text-gray-600">Completed Loans</p>
+          <h2 className="text-lg md:text-xl font-semibold text-[#ED6E0A] mt-1">
+            {society?.pendingLoanCount} Completed
+          </h2>
+          <Link to={`/main/loan-applications/${groupId}/completed`} className="text-[#003399] underline">View Completed Loans</Link>
+        </div> */}
       </div>
 
       {/* Detailed Section */}

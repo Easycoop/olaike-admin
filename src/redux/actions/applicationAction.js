@@ -4,6 +4,7 @@ import { useDispatcher } from "../../utils/useDispatcher";
 import {
   getApplications,
   getLoanApplications,
+  getSocietyLoanApplications,
   getSingleApplication,
   getSingleLoanApplication,
   updateLoanApplication,
@@ -59,6 +60,18 @@ export const doGetLoanApplications = createAsyncThunk(
   }
 );
 
+export const doGetSocietyLoanApplications = createAsyncThunk(
+  "applications/doGetSocietyLoanApplications",
+  async ({ status, groupId }, { rejectWithValue }) => {
+    try {
+      const data = await getSocietyLoanApplications(status, groupId);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
 export const doGetSingleLoanApplication = createAsyncThunk(
   "applications/doGetSingleLoanApplication",
   async (payload, { rejectWithValue }) => {
@@ -104,6 +117,8 @@ export const useUpdateUserApplication = () =>
   useDispatcher(doUpdateUserApplication);
 export const useGetLoanApplications = () =>
   useDispatcher(doGetLoanApplications);
+export const useGetSocietyLoanApplications = () =>
+  useDispatcher(doGetSocietyLoanApplications);
 export const useGetSingleLoanApplication = () =>
   useDispatcher(doGetSingleLoanApplication);
 export const useUpdateLoanApplication = () =>

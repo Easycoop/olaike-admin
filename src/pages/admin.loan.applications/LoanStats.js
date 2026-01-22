@@ -3,6 +3,7 @@ import { FaFileCircleCheck } from "react-icons/fa6";
 import { useGetLoanCounts } from "../../redux/actions/applicationAction";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const LoanStats = () => {
     const getLoanCounts = useGetLoanCounts();
@@ -43,14 +44,24 @@ const LoanStats = () => {
             </select>
           </span>
           <article className="ad__student__app__section__article">
-            <div className="ad__student__app__section__one__card">
+            {/* <div className="ad__student__app__section__one__card">
               <FaFile className="ad__student__app__section__one__card__icon one" />
               <div>
                 <h3>Total applications</h3>
                 <h1>{loanCounts.total}</h1>
               </div>
-            </div>
-            <div className="ad__student__app__section__one__card">
+            </div> */}
+            <Link to={'/main/loan-applications/completed'} className="ad__student__app__section__one__card">
+              <FaFileCircleCheck className="ad__student__app__section__one__card__icon one" />
+              <div>
+                <h3>Completed loans</h3>
+                <h1>
+                  
+                  {loanCounts.inactive}
+                </h1>
+              </div>
+            </Link>
+            <Link to={'/main/loan-applications/approved'} className="ad__student__app__section__one__card">
               <FaFileCircleCheck className="ad__student__app__section__one__card__icon two" />
               <div>
                 <h3>Approved applications</h3>
@@ -58,8 +69,8 @@ const LoanStats = () => {
                   {loanCounts.active}
                 </h1>
               </div>
-            </div>
-            <div className="ad__student__app__section__one__card">
+            </Link>
+            <Link to={'/main/loan-applications/pending'} className="ad__student__app__section__one__card">
               <FaFileImport className="ad__student__app__section__one__card__icon three" />
               <div>
                 <h3>Pending applications</h3>
@@ -67,8 +78,8 @@ const LoanStats = () => {
                   {loanCounts.pending}
                 </h1>
               </div>
-            </div>
-            <div className="ad__student__app__section__one__card">
+            </Link>
+            <Link to={'/main/loan-applications/rejected'} className="ad__student__app__section__one__card">
               <FaFileExcel className="ad__student__app__section__one__card__icon four" />
               <div>
                 <h3>Rejected applications</h3>
@@ -76,7 +87,7 @@ const LoanStats = () => {
                   {loanCounts.rejected}
                 </h1>
               </div>
-            </div>
+            </Link>
           </article>
         </section>
 };
