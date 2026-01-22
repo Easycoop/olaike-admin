@@ -228,15 +228,17 @@ function SingleLoanApplications() {
                   onClick={() => {
                     submit("accept");
                   }}
+                  disabled={loading}
                 >
-                  Accept
+                  {loading ? "Processing..." : "Accept"}
                 </button>
                 <button
                   onClick={() => {
                     submit("reject");
                   }}
+                  disabled={loading}
                 >
-                  Reject
+                  {loading ? "Processing..." : "Reject"}
                 </button>
               </span>
 
