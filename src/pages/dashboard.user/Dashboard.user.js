@@ -164,7 +164,7 @@ function DashboardUser() {
                     navigate(`/main/user/${item.id}`);
                   }}
                 >
-                  {item.Roles && item.Roles[0].name}
+                  {item.Roles && item.Roles[0] && item.Roles[0].name}
                 </h1>
                 <h1
                     className="dashboard__users__section__two__entry__status"
@@ -175,7 +175,7 @@ function DashboardUser() {
                     <span>
                       <PiCircleFill
                         className={
-                          item.isVerified
+                          item?.isVerified
                             ? "ad__student__app__section__two__entry__status__icon successful"
                             : "ad__student__app__section__two__entry__status__icon unsuccessful"
                         }
@@ -187,7 +187,7 @@ function DashboardUser() {
                     className="dashboard__users__section__two__entry__created"
                    
                   >
-                    {ngDateFormat(item.createdAt)}
+                    {ngDateFormat(item?.createdAt)}
                   </h1>
                   <h1 className="dashboard__users__section__two__entry__action">
                     <span>
