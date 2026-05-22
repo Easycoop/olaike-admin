@@ -43,3 +43,24 @@ export const clearDB = async () => {
 };
 
 
+
+export const deleteUser = async (user_id) => {
+  try {
+    const response = await api.delete(`/admin/user/${user_id}`);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      // Add server response details to the error
+      error.message = `${
+        error.response.data.error || error.response.statusText
+      }`;
+    } else if (error.request) {
+      // Add request details to the error
+      error.message = "No response received from server.";
+    } else {
+      // Add request setup details to the error
+      error.message = `${error.message}`;
+    }
+    throw error;
+  }
+};

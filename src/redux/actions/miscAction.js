@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { useDispatcher } from "../../utils/useDispatcher";
-import { getDashboardData, clearDB } from "../../services/miscService";
+import { getDashboardData, clearDB, deleteUser } from "../../services/miscService";
 
 export const doGetDashboardData = createAsyncThunk(
   "misc/doGetDashboardData",
@@ -27,6 +27,20 @@ export const doClearDB = createAsyncThunk(
   }
 );
 
+export const doDeleteUser = createAsyncThunk(
+  "misc/doDeleteUser",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const data = await deleteUser(payload);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
 export const useGetDashboardData = () => useDispatcher(doGetDashboardData);
 
 export const useClearDB = () => useDispatcher(doClearDB);
+
+export const useDeleteUser = () => useDispatcher(doDeleteUser);

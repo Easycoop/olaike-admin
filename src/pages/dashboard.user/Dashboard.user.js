@@ -5,13 +5,17 @@ import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useGetUsers } from "../../redux/actions/userAction";
+import { useDeleteUser } from "../../redux/actions/miscAction";
 import Loading from "../../components/splash/loading/Loading";
 import NoResult from "../../components/splash/no-result/NoResult";
 import {ngDateFormat} from '../../utils/time';
+import Modal from "../../components/ui/modal/Modal";
+import { ClipLoader } from "react-spinners";
 
 function DashboardUser() {
   
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [userResult, setUserResult] = useState([]);
@@ -19,10 +23,13 @@ function DashboardUser() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
 
   const navigate = useNavigate();
 
   const getUsers = useGetUsers();
+  const deleteUser = useDeleteUser();
 
   const handleSearch = (query) => {
     setSearchQuery(query.toLowerCase());
@@ -51,6 +58,24 @@ function DashboardUser() {
       setErrorMessage(error.response?.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleUserDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await deleteUser(selectedUserId);
+      if (response?.payload.success === true) {
+        setErrorMessage("");
+        handleGetUsers(currentPage);
+        return;
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (error) {
+      setErrorMessage(error.response?.message);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -198,6 +223,7 @@ function DashboardUser() {
                       <MdDelete
                         className="dashboard__users__section__two__entry__action__icon"
                         onClick={() => {
+                          setSelectedUserId(item.id);
                           setIsOpen(true);
                         }}
                       />
@@ -230,6 +256,35 @@ function DashboardUser() {
           
         )}
       </div>
+
+       <div className="container bg-grey society-setting">
+      
+              <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+              <div className="modal__withdraw1">
+                <h1 className="modal__withdraw1__title">Delete User</h1>
+                <p className="modal__withdraw1__description">
+                  Are you sure you want to delete this user?
+                </p>
+      
+                <div className="flex justify-end gap-2 mt-3 pt-3 border-t">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => setIsOpen(false)}
+                    disabled={isDeleting}
+                  >
+                    No
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleUserDelete}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? <ClipLoader color="#fff" size={20} /> : "Yes, Delete"}
+                  </button>
+                </div>
+              </div>
+            </Modal>
+           </div>
     </>
   );
 }
