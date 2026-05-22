@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { useDispatcher } from "../../utils/useDispatcher";
 import { getWallet, updateKegowData, getGroupWallet } from "../../services/walletService";
 import {UPDATE_USER } from "../types/authTypes";
-
+import { getSubWallets } from "../../services/walletService";
 
 export const updateUserAction = (updatedFields) => ({
   type: UPDATE_USER,
@@ -64,6 +64,21 @@ export const doGetGroupWallet = createAsyncThunk(
   }
 );
 
+
+export const doGetSubWallets = createAsyncThunk(
+  "wallet/doGetSubWallets",
+  async (groupId, { rejectWithValue }) => {
+    try {
+      const data = await getSubWallets(groupId);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Action failed");
+    }
+  }
+);
+
+
+export const useGetSubWallets = () => useDispatcher(doGetSubWallets);
 export const useGetWallet = () => useDispatcher(doGetWallet);
 export const useUpdateKegowData = () => useDispatcher(doUpdateKegowData);
 export const useGetGroupWallet = () => useDispatcher(doGetGroupWallet);

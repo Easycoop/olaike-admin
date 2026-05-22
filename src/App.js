@@ -41,6 +41,9 @@ import {setFavicon, setSiteTitle} from "./utils/setConfigMetadata";
 import {ConfigContext} from "./context/ConfigProvider";
 import SocietyDetailsScreen from "./pages/admin.societies/Admin.society-datail";
 import SocietyMembers from "./pages/admin.societies/Admin.society-members";
+import ThriftProgramsListScreen from "./pages/admin.thrifts/programs";
+import CreateContributionScreen from "./pages/admin.thrifts/programs.create";
+import FeeManagementScreen from "./pages/admin.fees/management";
 
 function App() {
   const { config, fetchConfig } = useContext(ConfigContext);
@@ -84,6 +87,8 @@ function App() {
                 <Route path="societies" element={<AdminSocieties />} /> 
 
                 <Route path="societies/:groupId" element={<SocietyDetailsScreen />} />
+                <Route path="societies/:groupId/thrift-programs" element={<ThriftProgramsListScreen />} />
+                <Route path="societies/:groupId/contributions/create" element={<CreateContributionScreen />} />
 
                 <Route path="societies/:groupId/members" element={<SocietyMembers />} />
 
@@ -131,6 +136,8 @@ function App() {
                   element={<LoanDetail />}
                 />
                 <Route path="thrifts/:programId" element={<Thrifts />} />
+
+                <Route path="fees/:groupId" element={<FeeManagementScreen />} />
               </Route>
             </Route>
 

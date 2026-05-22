@@ -89,6 +89,28 @@ export const sidebarMenu = (isSuperAdmin, user) => [
         : []),
     ],
   },
+
+   {
+    id: 6,
+    label: "Fees",
+    icon: <LiaHourglassEndSolid />,
+    children: [
+      ...(isSuperAdmin 
+        ? [{
+            id: 61,
+            label: "Union Fees",
+            icon: <HiMiniTableCells />,
+            path: `/main/fees/${user?.Group?.id}`,
+          }]
+        : [{
+            id: 62,
+            label: "Society Fees",
+            icon: <IoMdClose />,
+            path: `/main/fees/${user?.Group?.id}`,
+          }]),
+    ],
+  },
+  
   // {
   //   id: 6,
   //   label: "Deposit Money",

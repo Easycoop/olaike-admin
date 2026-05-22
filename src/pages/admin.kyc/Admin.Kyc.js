@@ -81,7 +81,7 @@ const Kyc = () => {
         <thead>
           <tr style={{ backgroundColor: '#eaeaea' }}>
             <th style={cellStyle}>Full Name</th>
-            <th style={cellStyle}>Requirement Step</th>
+            <th style={cellStyle}>Required Document</th>
             <th style={cellStyle}>Submitted Text</th>
             <th style={cellStyle}>Submitted File</th>
             <th style={cellStyle}>Action</th>
@@ -106,8 +106,8 @@ const Kyc = () => {
                 
                 {/* The text input (e.g., NIN number or BVN) */}
                 <td style={cellStyle}>
-                  {info.identificationDocument && info.identificationDocument !== 'FILE_UPLOAD' 
-                    ? info.identificationDocument 
+                  {info.identificationDocument && info.identificationDocument !== 'Face Capture' 
+                    ? info.documentIdentifier 
                     : <span style={{color: '#ccc'}}>N/A</span>}
                 </td>
                 

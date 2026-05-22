@@ -62,3 +62,13 @@ export const updateKegowData = async (groupId, payload) => {
     throw error;
   }
 };
+
+export const getSubWallets = async (groupId) => {
+  try {
+    // Note: Adjust this endpoint string if your legacy route for fetching sub-wallets is different
+    const response = await api.get(`/sub-wallet/group/${groupId}`); 
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};

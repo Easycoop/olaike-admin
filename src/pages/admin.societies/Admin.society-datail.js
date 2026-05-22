@@ -92,6 +92,19 @@ const SocietyDetailsScreen = () => {
           <Link to={`/main/loan-applications/${groupId}/pending`} className="text-[#003399] underline">View Pending Loans</Link>
         </div>
 
+        <div className="bg-white border border-[#003399]/20 rounded-xl p-4 shadow-sm">
+          <p className="text-sm text-gray-600">Thrift Programs</p>
+          <h2 className="text-lg md:text-xl font-semibold text-[#003399] mt-1">
+            Contributions
+          </h2>
+          <Link
+            to={`/main/societies/${groupId}/thrift-programs`}
+            className="text-[#003399] underline"
+          >
+            Manage Thrift Programs
+          </Link>
+        </div>
+
          {/* <div className="bg-white border border-[#003399]/20 rounded-xl p-4 shadow-sm">
           <p className="text-sm text-gray-600">Completed Loans</p>
           <h2 className="text-lg md:text-xl font-semibold text-[#ED6E0A] mt-1">
