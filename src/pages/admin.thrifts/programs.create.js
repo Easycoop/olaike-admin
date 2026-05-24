@@ -33,7 +33,7 @@ const CreateContributionScreen = () => {
     endDate: "",
     deadline: "",
     deadlineTime: "",
-    deadlineDay: "",
+    deadlineDay: null,
     status: "active",
   });
 
@@ -178,7 +178,7 @@ const CreateContributionScreen = () => {
                 min="1"
                 max="31"
                 className="form-control"
-                value={newContribution.deadlineDay || ""}
+                value={newContribution.deadlineDay || null}
                 onChange={(e) => setNewContribution({ ...newContribution, deadlineDay: e.target.value })}
               />
               <ValidationError validationErrors={validationErrors} field="deadlineDay" />
