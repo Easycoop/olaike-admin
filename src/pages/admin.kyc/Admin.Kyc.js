@@ -134,8 +134,8 @@ const Kyc = () => {
                     </div>
                   ) : (
                     <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                      {/* Approved <FaCircle style={{ color: 'green' }} /> */}
-                       <button onClick={() => handleApprove(info)}>Approve</button>
+                      Approved <FaCircle style={{ color: 'green' }} />
+                       {/* <button onClick={() => handleApprove(info)}>Approve</button> */}
                       <button onClick={() => handleReject(info)} className="btn-danger">Revert</button>
                     </div>
                   )}
